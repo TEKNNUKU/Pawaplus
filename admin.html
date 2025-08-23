@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pawa+9ja Admin Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary-orange: #FF6B35;
+      --primary-yellow: #F7931E;
+      --success-green: #28a745;
+      --urgent-red: #dc3545;
+      --trust-blue: #007bff;
+      --text-dark: #2c3e50;
+      --text-light: #6c757d;
+      --bg-light: #f8f9fa;
+      --white: #ffffff;
+      --gray-border: #e0e0e0;
+      --shadow: 0 5px 15px rgba(0,0,0,0.05);
+    }
+    
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: var(--bg-light);
+      color: var(--text-dark);
+      line-height: 1.6;
+    }
+    
+    .container { max-width: 1200px; margin: 2rem auto; padding: 0 1rem; }
+    
+    .header {
+      background: linear-gradient(135deg, var(--primary-orange), var(--primary-yellow));
+      color: var(--white);
+      padding: 1rem 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: var(--shadow);
+    }
+    
+    .header-title { font-size: 1.8rem; font-weight: 700; display: flex; align-items: center; gap: 10px; }
+    
+    .header-title i { font-size: 1.5rem; }
+    
+    .header button {
+      background: rgba(255, 255, 255, 0.2);
+      border: none;
+      border-radius: 8px;
+      padding: 0.5rem 1rem;
+      color: var(--white);
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    
+    .header button:hover { background: rgba(255, 255, 255, 0.4); }
+    
+    .dashboard-section {
+      background: var(--white);
+      border-radius: 15px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      box-shadow: var(--shadow);
+    }
+    
+    .dashboard-section h2 { border-bottom: 2px solid var(--gray-border); padding-bottom: 1rem; margin-bottom: 1.5rem; }
+    
+    .form-grid { display: grid; gap: 1rem; }
+    
+    .form-group { display: flex; flex-direction: column; }
+    
+    .form-group label { font-weight: 500; margin-bottom: 0.5rem; }
+    
+    .form-group input, .form-group textarea, .form-group select {
+      padding: 0.8rem;
+      border: 1px solid var(--gray-border);
+      border-radius: 8px;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .form-group.checkbox-group {
+      flex-direction: row;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .form-group.checkbox-group input[type="checkbox"] {
+      width: auto;
+    }
+
+    .btn-primary {
+      background: var(--primary-orange);
+      color: var(--white);
+      border: none;
+      border-radius: 8px;
+      padding: 0.8rem 1.2rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.2s;
+    }
+    
+    .btn-primary:hover { background: #e55a2e; transform: translateY(-2px); }
+    
+    .table-container { overflow-x: auto; }
+    
+    table { width: 100%; border-collapse: collapse; text-align: left; }
+    
+    table th, table td { padding: 1rem; border-bottom: 1px solid var(--gray-border); }
+    
+    table th { background: var(--bg-light); font-weight: 600; color: var(--text-light); }
+    
+    .btn-action { background: none; border: none; cursor: pointer; font-size: 1rem; transition: color 0.2s; }
+    
+    .delete-btn { color: var(--urgent-red); }
+    
+    .delete-btn:hover { color: #b32a35; }
+    
+    .status-badge { padding: 0.3rem 0.8rem; border-radius: 20px; font-size: 0.8rem; font-weight: 600; color: var(--white); }
+    
+    .status-pending { background: var(--primary-orange); }
+    .status-shipped { background: var(--trust-blue); }
+    .status-delivered { background: var(--success-green); }
+
+    .message-modal {
+      position: fixed;
+      top: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 1rem 2rem;
+      border-radius: 10px;
+      box-shadow: var(--shadow);
+      display: none;
+      align-items: center;
+      gap: 1rem;
+      z-index: 1000;
+      animation: fadeInDown 0.5s ease-out;
+    }
+    
+    .message-modal i { font-size: 1.5rem; }
+    
+    .modal-success { background: var(--success-green); color: var(--white); }
+    .modal-error { background: var(--urgent-red); color: var(--white); }
+    .modal-info { background: var(--trust-blue); color: var(--white); }
+    
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translate(-50%, -20px); }
+      to { opacity: 1; transform: translate(-50%, 0); }
+    }
+    
+    @media (max-width: 768px) {
+      .header-title { font-size: 1.4rem; }
+      .form-grid { grid-template-columns: 1fr; }
+      .dashboard-section { padding: 1.5rem; }
+      .table-container { font-size: 0.9rem; }
+      .header button { padding: 0.4rem 0.8rem; }
+    }
+  </style>
+
+</head>
+<body>
+  <header class="header">
+    <div class="header-title">
+      <i class="fas fa-tools"></i>
+      <span>Pawa+9ja Admin</span>
+    </div>
+    <button onclick="logout()">
+      <i class="fas fa-sign-out-alt"></i> Logout
+    </button>
+  </header>
+
+  <div class="container">
+    <div class="dashboard-section">
+      <h2>Add New Product</h2>
+      <form id="addProductForm">
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="productName">Product Name</label>
+            <input type="text" id="productName" required>
+          </div>
+          <div class="form-group">
+            <label for="productCategory">Category</label>
+            <select id="productCategory" required>
+              <option value="complete-systems">Complete Solar Systems</option>
+              <option value="inverters">Inverters & Controllers</option>
+              <option value="power-banks">Solar Power Banks</option>
+              <option value="accessories">Solar Accessories</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="productPrice">Price (₦)</label>
+            <input type="number" id="productPrice" required>
+          </div>
+          <div class="form-group">
+            <label for="productStock">Stock</label>
+            <input type="number" id="productStock" required>
+          </div>
+          <div class="form-group">
+            <label for="productImageUrl">Image URL</label>
+            <input type="url" id="productImageUrl" required>
+          </div>
+          <div class="form-group checkbox-group">
+              <input type="checkbox" id="isHotDeal">
+              <label for="isHotDeal">Feature as Hot Deal?</label>
+          </div>
+          <div class="form-group">
+              <label>Available Payment Options</label>
+              <div style="display: flex; gap: 15px;">
+                  <div class="checkbox-group">
+                      <input type="checkbox" id="paySmallSmall">
+                      <label for="paySmallSmall">Pay Small-Small</label>
+                  </div>
+                  <div class="checkbox-group">
+                      <input type="checkbox" id="swapAvailable">
+                      <label for="swapAvailable">Swap Available</label>
+                  </div>
+              </div>
+          </div>
+          <div class="form-group" style="grid-column: 1 / -1;">
+            <label for="productDescription">Description</label>
+            <textarea id="productDescription" rows="3" required></textarea>
+          </div>
+        </div>
+        <button type="submit" class="btn-primary" style="margin-top: 1rem;">
+          <i class="fas fa-plus-circle"></i> Add Product
+        </button>
+      </form>
+    </div>
+
+    <div class="dashboard-section">
+      <h2>Products in Stock</h2>
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Price</th>
+              <th>Stock</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="productList">
+            <tr><td colspan="4" class="text-center">Loading products...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    
+    <div class="dashboard-section">
+      <h2>Recent Orders</h2>
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Order ID</th>
+              <th>Customer</th>
+              <th>Total</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="orderList">
+            <tr><td colspan="5" class="text-center">Loading orders...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div id="messageModal" class="message-modal">
+    <i id="messageIcon"></i>
+    <span id="messageText"></span>
+  </div>
+
+  <script src="https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js"></script>
+  <script src="pawa.js"></script>
+  <script>
+    if (!sessionStorage.getItem('is_admin')) {
+      window.location.href = "index.html";
+    }
+
+    function logout() {
+      sessionStorage.removeItem('is_admin');
+      window.location.href = 'index.html';
+    }
+  </script>
+</body>
+</html>
