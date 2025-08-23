@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us | Pawa+9ja</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header class="header">
+        <div class="logo">
+            <a href="index.html">
+                <img src="https://pink-quiet-wolf-922.mypinata.cloud/ipfs/bafybeicgqfjj23iipqqlr332j6r4m56z53wkw335a7r7n6y67f33m52f4a" alt="Pawa+9ja Logo">
+            </a>
+        </div>
+        <nav class="nav-links" id="navLinks">
+            <a href="index.html">Home</a>
+            <a href="about.html">About</a>
+            <a href="index.html#products">Products</a>
+            <a href="contact.html">Contact</a>
+            <a href="#" id="adminLink">Admin</a>
+        </nav>
+        <div class="nav-icons">
+            <div class="cart-icon" id="cartIcon">
+                <i class="fas fa-shopping-cart"></i>
+                <span class="cart-count" id="cartCount">0</span>
+            </div>
+            <div class="menu-icon" id="menuIcon">
+                <i class="fas fa-bars"></i>
+            </div>
+        </div>
+    </header>
+
+    <main class="container about-us">
+        <section class="about-hero">
+            <h1>Our Story</h1>
+            <p>Pawa+9ja is Nigeria's most trusted solar marketplace. We're on a mission to bring sustainable, reliable, and affordable energy solutions to every home and business.</p>
+        </section>
+
+        <section class="about-content">
+            <div class="mission-section">
+                <h2>Our Mission</h2>
+                <p>To empower Nigerians with clean and consistent energy, ending the reliance on generators and grid instability. We believe that everyone deserves access to uninterrupted power.</p>
+            </div>
+            <div class="values-section">
+                <h2>Our Values</h2>
+                <ul>
+                    <li><strong>Reliability:</strong> We only sell products that we trust, ensuring you get consistent, long-lasting power.</li>
+                    <li><strong>Affordability:</strong> With flexible payment options like 'Pay Small-Small', we make solar accessible to everyone.</li>
+                    <li><strong>Customer Trust:</strong> We build long-term relationships through transparent pricing, excellent service, and a swap program for old products.</li>
+                    <li><strong>Innovation:</strong> We stay ahead of the curve, offering the latest solar technology to meet your evolving needs.</li>
+                </ul>
+            </div>
+        </section>
+    </main>
+    
+    <footer class="footer">
+        <div class="footer-section contact-info">
+            <h4>Contact Us</h4>
+            <p><i class="fas fa-envelope"></i> info@pawa9ja.com</p>
+            <p><i class="fas fa-phone"></i> +234 800 123 4567</p>
+            <p><i class="fas fa-map-marker-alt"></i> 123 Solar Way, Lagos, Nigeria</p>
+        </div>
+        <div class="footer-section social-links">
+            <h4>Follow Us</h4>
+            <div class="social-icons">
+                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-linkedin-in"></i></a>
+            </div>
+        </div>
+        <div class="footer-section quick-links">
+            <h4>Quick Links</h4>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About Us</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a href="#">FAQ</a></li>
+            </ul>
+        </div>
+    </footer>
+
+    <div id="cartSidebar" class="cart-sidebar">
+        <div class="cart-header">
+            <h3>Shopping Cart</h3>
+            <button class="cart-close-btn" id="cartCloseBtn">&times;</button>
+        </div>
+        <div class="cart-items" id="cartItems"></div>
+        <div class="cart-summary">
+            <div class="cart-total">
+                <span>Total:</span>
+                <span id="totalAmount">₦0</span>
+            </div>
+            <button class="btn btn-checkout" id="checkoutBtn">Checkout</button>
+        </div>
+    </div>
+    <script src="pawa.js"></script>
+</body>
+</html>
