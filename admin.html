@@ -159,7 +159,6 @@
       .header button { padding: 0.4rem 0.8rem; }
     }
   </style>
-
 </head>
 <body>
   <header class="header">
@@ -208,9 +207,9 @@
           </div>
           <div class="form-group">
               <label>Available Payment Options</label>
-              <div style="display: flex; gap: 15px;">
+              <div style="display: flex; gap: 15px; margin-top: 5px;">
                   <div class="checkbox-group">
-                      <input type="checkbox" id="paySmallSmall">
+                      <input type="checkbox" id="paySmallSmall" checked>
                       <label for="paySmallSmall">Pay Small-Small</label>
                   </div>
                   <div class="checkbox-group">
@@ -280,12 +279,17 @@
   <script src="https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js"></script>
   <script src="pawa.js"></script>
   <script>
+    // Security check to prevent direct access without login
     if (!sessionStorage.getItem('is_admin')) {
       window.location.href = "index.html";
     }
 
+    // Function to handle the logout process
     function logout() {
+      // Clear the session variable that keeps the user logged in
       sessionStorage.removeItem('is_admin');
+      
+      // Redirect the user back to the home page
       window.location.href = 'index.html';
     }
   </script>
