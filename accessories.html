@@ -4,9 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Solar Accessories | Pawa+9ja</title>
-    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body data-category="accessories">
 
@@ -43,15 +44,6 @@
                 <a href="inverters.html">Inverters & Controllers</a>
                 <a href="accessories.html" class="active">Accessories</a>
             </div>
-            <div class="filter-controls">
-                <input type="text" id="searchInput" placeholder="Search this category...">
-                <select id="priceFilter">
-                    <option value="all">All Prices</option>
-                    <option value="low">Under ₦500k</option>
-                    <option value="medium">₦500k - ₦1M</option>
-                    <option value="high">Over ₦1M</option>
-                </select>
-            </div>
             <div class="products-grid" id="productsGrid">
                 </div>
         </section>
@@ -83,7 +75,7 @@
             </ul>
         </div>
     </footer>
-
+    
     <div id="cartSidebar" class="cart-sidebar">
         <div class="cart-header">
             <h3>Shopping Cart</h3>
@@ -99,43 +91,10 @@
         </div>
     </div>
     
-    <div id="productModal" class="product-modal">
-        <div class="modal-content">
-            <span class="modal-close" id="modalCloseBtn">&times;</span>
-            <div class="modal-body">
-                <div class="modal-image">
-                    <img id="modalImage" src="" alt="">
-                </div>
-                <div class="modal-info">
-                    <h3 id="modalTitle"></h3>
-                    <div class="product-rating">
-                        <span class="stars">★★★★★</span>
-                        <span class="rating-count" id="modalRating"></span>
-                    </div>
-                    <div class="modal-price">
-                        <span class="current-price" id="modalPrice"></span>
-                        <span class="original-price" id="modalOriginalPrice"></span>
-                    </div>
-                    <p id="modalDescription"></p>
-                    <button class="btn btn-primary" id="modalAddToCartBtn">
-                        <i class="fas fa-shopping-cart"></i> Add to Cart
-                    </button>
-                </div>
-            </div>
+    <div id="productModal" class="modal">
         </div>
-    </div>
-
-    <div id="adminModal" class="modal">
-        <div class="modal-content">
-            <span class="modal-close" id="adminCloseBtn">&times;</span>
-            <h3>Admin Login</h3>
-            <form id="adminLoginForm">
-                <input type="password" id="adminPassword" placeholder="Enter password" required>
-                <button type="submit" class="btn btn-primary">Login</button>
-            </form>
-        </div>
-    </div>
 
     <script src="pawa.js"></script>
+
 </body>
 </html>
