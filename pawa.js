@@ -1,9 +1,9 @@
 // Mock data for demonstration. In a real application, this would be fetched from a database.
 const products = [
-  { id: 'solar-kit-1kva', name: '1kVA Solar Kit', description: 'Complete solar system for small homes and offices. Powers lights, fans, and a TV.', price: 450000, original_price: 500000, stock: 15, ratings: 4.8, category: 'complete-systems', isHotDeal: false, paySmallSmall: true, swapAvailable: false, imageUrl: 'https://pink-quiet-wolf-922.mypinata.cloud/ipfs/bafybeidxjelml6mvd2x233vxpgg3ycdh6odix6sh2ugijsyjiqbfkvd3lq' },
-  { id: 'power-bank-500w', name: '500W Solar Power Bank', description: 'Portable power bank for charging laptops, phones, and small appliances.', price: 120000, original_price: 135000, stock: 8, ratings: 4.5, category: 'power-banks', isHotDeal: true, paySmallSmall: true, swapAvailable: false, imageUrl: 'https://pink-quiet-wolf-922.mypinata.cloud/ipfs/bafybeicicd2k5s2ilg3y22wp67n6l2smfxuoch3yquxxhu64a6jiys7m3q' },
-  { id: 'inverter-3kva', name: '3kVA Pure Sine Wave Inverter', description: 'High-quality inverter for seamless power conversion. Perfect for home use.', price: 280000, original_price: null, stock: 22, ratings: 4.9, category: 'inverters', isHotDeal: false, paySmallSmall: true, swapAvailable: true, imageUrl: 'https://pink-quiet-wolf-922.mypinata.cloud/ipfs/bafybeigz6gxhmfkwjnkk3vs2m7n662bhxr6l3igxx5wzl5i4x2yc47gwbm' },
-  { id: 'solar-panel-300w', name: '300W Solar Panel', description: 'High-efficiency monocrystalline solar panel for residential use.', price: 85000, original_price: 90000, stock: 5, ratings: 4.7, category: 'accessories', isHotDeal: true, paySmallSmall: false, swapAvailable: false, imageUrl: 'https://pink-quiet-wolf-922.mypinata.cloud/ipfs/bafybeidcvnuylhjlbtwncjfyvxmzuejsozuuzql3wld36luu4sqxbkmoti' }
+  { id: 'solar-kit-1kva', name: '1kVA Solar Kit', description: 'Complete solar system for small homes and offices. Powers lights, fans, and a TV.', price: 450000, original_price: 500000, stock: 15, ratings: 4.8, category: 'complete-systems', imageUrl: 'https://pink-quiet-wolf-922.mypinata.cloud/ipfs/bafybeidxjelml6mvd2x233vxpgg3ycdh6odix6sh2ugijsyjiqbfkvd3lq', isHotDeal: true, paySmallSmall: true, swapAvailable: false },
+  { id: 'power-bank-500w', name: '500W Solar Power Bank', description: 'Portable power bank for charging laptops, phones, and small appliances.', price: 120000, original_price: 135000, stock: 8, ratings: 4.5, category: 'power-banks', imageUrl: 'https://pink-quiet-wolf-922.mypinata.cloud/ipfs/bafybeicicd2k5s2ilg3y22wp67n6l2smfxuoch3yquxxhu64a6jiys7m3q', isHotDeal: false, paySmallSmall: true, swapAvailable: true },
+  { id: 'inverter-3kva', name: '3kVA Pure Sine Wave Inverter', description: 'High-quality inverter for seamless power conversion. Perfect for home use.', price: 280000, original_price: null, stock: 22, ratings: 4.9, category: 'inverters', imageUrl: 'https://pink-quiet-wolf-922.mypinata.cloud/ipfs/bafybeigz6gxhmfkwjnkk3vs2m7n662bhxr6l3igxx5wzl5i4x2yc47gwbm', isHotDeal: true, paySmallSmall: true, swapAvailable: false },
+  { id: 'solar-panel-300w', name: '300W Solar Panel', description: 'High-efficiency monocrystalline solar panel for residential use.', price: 85000, original_price: 90000, stock: 5, ratings: 4.7, category: 'accessories', imageUrl: 'https://pink-quiet-wolf-922.mypinata.cloud/ipfs/bafybeidcvnuylhjlbtwncjfyvxmzuejsozuuzql3wld36luu4sqxbkmoti', isHotDeal: false, paySmallSmall: false, swapAvailable: false }
 ];
 
 let cart = JSON.parse(localStorage.getItem('solarhubCart')) || {};
@@ -53,16 +53,17 @@ const hideProductModal = () => {
 
 // User Actions
 const handleAdminLogin = (e) => {
-  e.preventDefault();
-  const password = document.getElementById('adminPassword').value;
-  
-  if (password === "admin123") {
-    alert("Login successful! Redirecting to Admin Dashboard.");
-    sessionStorage.setItem('is_admin', 'true');
-    window.location.href = 'admin.html';
-  } else {
-    alert("Incorrect password.");
-  }
+    e.preventDefault();
+    const password = document.getElementById('adminPassword').value;
+
+    // This is a simple mock. In a real app, this should be a secure API call.
+    if (password === "admin123") {
+        alert("Login successful! Redirecting to Admin Dashboard.");
+        sessionStorage.setItem('is_admin', 'true');
+        window.location.href = 'admin.html';
+    } else {
+        alert("Incorrect password.");
+    }
 };
 
 const addToCart = (productId) => {
@@ -78,7 +79,6 @@ const addToCart = (productId) => {
   }
 };
 
-// Functions for additional payment options
 const buyNow = (productId) => {
     alert(`Initiating Buy Now for product ${productId}. This will immediately take you to checkout.`);
 };
@@ -153,8 +153,9 @@ const updateCartUI = () => {
 
 const renderProducts = (productsToRender) => {
     const productsGrid = document.getElementById('productsGrid');
-    productsGrid.innerHTML = '';
+    if (!productsGrid) return; // Exit if not on a products page
 
+    productsGrid.innerHTML = '';
     const productsToDisplay = productsToRender || products;
 
     if (productsToDisplay.length === 0) {
@@ -163,18 +164,10 @@ const renderProducts = (productsToRender) => {
     }
 
     productsToDisplay.forEach(product => {
-      const hotDealBadge = product.isHotDeal ? `<span class="product-badge hot-deal">🔥 Hot Deal!</span>` : '';
-      const limitedStockBadge = product.stock < 10 ? `<span class="product-badge limited-stock">Limited Stock!</span>` : '';
-      
-      const paymentOptionsHTML = `
-        ${product.paySmallSmall ? `<button class="btn btn-link pay-small-small-btn" data-id="${product.id}">Pay Small-Small</button>` : ''}
-        ${product.swapAvailable ? `<button class="btn btn-link swap-btn" data-id="${product.id}">Swap Available</button>` : ''}
-      `;
-
       const productCard = `
           <div class="product-card animate__animated animate__fadeInUp" data-id="${product.id}">
-            ${hotDealBadge}
-            ${limitedStockBadge}
+            ${product.stock < 10 ? `<span class="product-badge">Limited Stock!</span>` : ''}
+            ${product.isHotDeal ? `<span class="hot-deal-badge">🔥 Hot Deal</span>` : ''}
             <div class="product-image">
               <img src="${product.imageUrl}" alt="${product.name}" style="width:100%; height:100%; object-fit: cover; border-radius: 15px 15px 0 0;">
             </div>
@@ -195,7 +188,8 @@ const renderProducts = (productsToRender) => {
                   <button class="btn btn-secondary buy-now-btn" data-id="${product.id}">Buy Now</button>
               </div>
               <div class="payment-options">
-                  ${paymentOptionsHTML}
+                  ${product.paySmallSmall ? `<button class="btn btn-link pay-small-small-btn" data-id="${product.id}">Pay Small-Small</button>` : ''}
+                  ${product.swapAvailable ? `<button class="btn btn-link swap-btn" data-id="${product.id}">Swap Available</button>` : ''}
               </div>
             </div>
           </div>
@@ -206,14 +200,12 @@ const renderProducts = (productsToRender) => {
 
 const filterProducts = () => {
     const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-    const category = document.getElementById('categoryFilter')?.value || null;
+    const category = document.getElementById('categoryFilter').value;
     const priceRange = document.getElementById('priceFilter').value;
-    const pageCategory = document.body.dataset.category || 'all';
 
     const filteredProducts = products.filter(product => {
         const matchesSearch = product.name.toLowerCase().includes(searchTerm) || product.description.toLowerCase().includes(searchTerm);
-        const matchesCategory = pageCategory === 'all' || product.category === pageCategory;
-        const matchesGlobalCategory = category === 'all' || product.category === category;
+        const matchesCategory = category === 'all' || product.category === category;
         
         let matchesPrice = true;
         if (priceRange !== 'all') {
@@ -223,7 +215,7 @@ const filterProducts = () => {
             if (priceRange === 'high') matchesPrice = price > 1000000;
         }
 
-        return matchesSearch && matchesCategory && matchesGlobalCategory && matchesPrice;
+        return matchesSearch && matchesCategory && matchesPrice;
     });
 
     renderProducts(filteredProducts);
@@ -253,76 +245,101 @@ const countdown = () => {
 
 // Initial calls and Event Listeners
 document.addEventListener('DOMContentLoaded', () => {
-    // Initial product rendering based on the page
-    const pageCategory = document.body.dataset.category;
-    if (pageCategory) {
-        const filtered = products.filter(p => p.category === pageCategory);
-        renderProducts(filtered);
-    } else {
-        renderProducts(products);
-    }
-
-    updateCartUI();
-    countdown();
-
-    // Navigation and UI buttons
-    document.getElementById('menuIcon').addEventListener('click', toggleMenu);
-    document.getElementById('cartIcon').addEventListener('click', toggleCart);
-    document.getElementById('cartCloseBtn').addEventListener('click', toggleCart);
-    document.getElementById('adminLink').addEventListener('click', showAdminLogin);
-    document.getElementById('adminCloseBtn').addEventListener('click', hideAdminLogin);
-    
-    // Check if element exists before adding event listener
-    const shopNowBtn = document.getElementById('shopNowBtn');
-    if (shopNowBtn) {
-        shopNowBtn.addEventListener('click', scrollToProducts);
-    }
-    
-    document.getElementById('checkoutBtn').addEventListener('click', checkout);
-    
-    // Product actions - Event delegation for multiple buttons
-    const productsGrid = document.getElementById('productsGrid');
-    if (productsGrid) {
-        productsGrid.addEventListener('click', (event) => {
-            const target = event.target;
-            const productCard = target.closest('.product-card');
-            if (!productCard) return;
-
-            const productId = productCard.dataset.id;
-            
-            if (target.closest('.add-to-cart-btn')) {
-                event.stopPropagation();
-                addToCart(productId);
-            } else if (target.closest('.buy-now-btn')) {
-                event.stopPropagation();
-                buyNow(productId);
-            } else if (target.closest('.pay-small-small-btn')) {
-                event.stopPropagation();
-                paySmallSmall(productId);
-            } else if (target.closest('.swap-btn')) {
-                event.stopPropagation();
-                swapAvailable(productId);
-            } else {
-                showProductModal(productId);
-            }
-        });
-    }
-
-    document.getElementById('modalCloseBtn')?.addEventListener('click', hideProductModal);
-    
-    // Search and Filters
-    document.getElementById('searchInput')?.addEventListener('keyup', filterProducts);
-    document.getElementById('categoryFilter')?.addEventListener('change', filterProducts);
-    document.getElementById('priceFilter')?.addEventListener('change', filterProducts);
-    
-    // Category cards on homepage only
-    document.querySelectorAll('.category-card').forEach(card => {
-        card.addEventListener('click', () => {
-            const category = card.dataset.category;
-            window.location.href = `${category}.html`;
-        });
+  // Check if we are on a category page and filter products
+  const pageCategory = document.body.dataset.category;
+  if (pageCategory) {
+    const filtered = products.filter(p => p.category === pageCategory);
+    renderProducts(filtered);
+    // Add active class to the correct category link
+    const categoryLinks = document.querySelectorAll('.category-nav a');
+    categoryLinks.forEach(link => {
+        if (link.href.includes(pageCategory)) {
+            link.classList.add('active');
+        } else {
+            link.classList.remove('active');
+        }
     });
-    
-    // Admin login
-    document.getElementById('adminLoginForm')?.addEventListener('submit', handleAdminLogin);
+  } else {
+    renderProducts(products);
+  }
+
+  updateCartUI();
+  countdown();
+
+  // Navigation and UI buttons
+  const menuIcon = document.getElementById('menuIcon');
+  if (menuIcon) menuIcon.addEventListener('click', toggleMenu);
+
+  const cartIcon = document.getElementById('cartIcon');
+  if (cartIcon) cartIcon.addEventListener('click', toggleCart);
+
+  const cartCloseBtn = document.getElementById('cartCloseBtn');
+  if (cartCloseBtn) cartCloseBtn.addEventListener('click', toggleCart);
+
+  const adminLink = document.getElementById('adminLink');
+  if (adminLink) adminLink.addEventListener('click', showAdminLogin);
+
+  const adminCloseBtn = document.getElementById('adminCloseBtn');
+  if (adminCloseBtn) adminCloseBtn.addEventListener('click', hideAdminLogin);
+
+  const shopNowBtn = document.getElementById('shopNowBtn');
+  if (shopNowBtn) shopNowBtn.addEventListener('click', scrollToProducts);
+
+  const checkoutBtn = document.getElementById('checkoutBtn');
+  if (checkoutBtn) checkoutBtn.addEventListener('click', checkout);
+  
+  // Product actions - Event delegation for multiple buttons
+  const productsGrid = document.getElementById('productsGrid');
+  if (productsGrid) {
+    productsGrid.addEventListener('click', (event) => {
+      const target = event.target;
+      const productCard = target.closest('.product-card');
+      if (!productCard) return;
+  
+      const productId = productCard.dataset.id;
+      
+      // Check which button was clicked
+      if (target.closest('.add-to-cart-btn')) {
+        event.stopPropagation();
+        addToCart(productId);
+      } else if (target.closest('.buy-now-btn')) {
+        event.stopPropagation();
+        buyNow(productId);
+      } else if (target.closest('.pay-small-small-btn')) {
+        event.stopPropagation();
+        paySmallSmall(productId);
+      } else if (target.closest('.swap-btn')) {
+        event.stopPropagation();
+        swapAvailable(productId);
+      } else {
+          // If the click is on the card but not a button, show modal
+          showProductModal(productId);
+      }
+    });
+  }
+
+  const modalCloseBtn = document.getElementById('modalCloseBtn');
+  if (modalCloseBtn) modalCloseBtn.addEventListener('click', hideProductModal);
+  
+  // Search and Filters
+  const searchInput = document.getElementById('searchInput');
+  if (searchInput) searchInput.addEventListener('keyup', filterProducts);
+
+  const categoryFilter = document.getElementById('categoryFilter');
+  if (categoryFilter) categoryFilter.addEventListener('change', filterProducts);
+
+  const priceFilter = document.getElementById('priceFilter');
+  if (priceFilter) priceFilter.addEventListener('change', filterProducts);
+  
+  // Category cards
+  document.querySelectorAll('.category-card').forEach(card => {
+    card.addEventListener('click', () => {
+      const category = card.dataset.category;
+      window.location.href = `${category}.html`;
+    });
+  });
+  
+  // Admin login
+  const adminLoginForm = document.getElementById('adminLoginForm');
+  if (adminLoginForm) adminLoginForm.addEventListener('submit', handleAdminLogin);
 });
