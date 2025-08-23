@@ -3,10 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pawa+9ja - Your Solar Marketplace</title>
-  <link rel="stylesheet" href="style.css">
+  <title>Pawa+9ja - Your Home for Solar Energy</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
@@ -19,7 +20,7 @@
     <nav class="nav-links" id="navLinks">
       <a href="index.html">Home</a>
       <a href="about.html">About</a>
-      <a href="#products">Products</a>
+      <a href="index.html#products">Products</a>
       <a href="contact.html">Contact</a>
       <a href="#" id="adminLink">Admin</a>
     </nav>
@@ -34,116 +35,93 @@
     </div>
   </header>
 
+  <div class="top-banner">
+    <div class="banner-content">
+      <span class="fire-icon">🔥</span> LIMITED TIME: Free Installation + 2-Year Warranty | Only <span id="countdown">48:00:00</span> Left!
+    </div>
+  </div>
+
   <main>
     <section class="hero-section">
-      <div class="container">
-        <div class="hero-content">
-          <div class="countdown-banner">
-            <i class="fas fa-fire"></i> LIMITED TIME: Free Installation + 2-Year Warranty | Only <span id="countdown">48:00:00</span> Left!
+      <div class="hero-overlay"></div>
+      <div class="hero-content animate__animated animate__fadeInUp">
+        <h1>Power Your Life with Solar Energy</h1>
+        <p>Nigeria's most trusted solar marketplace. Complete systems, power banks, inverters & more. Buy now or pay small-small!</p>
+        <div class="stats-grid">
+          <div class="stat-item">
+            <span class="stat-number">5,000+</span>
+            <span class="stat-text">Happy Customers</span>
           </div>
-          <h1>Power Your Life with Solar Energy</h1>
-          <p>Nigeria's most trusted solar marketplace. Complete systems, power banks, inverters & more. Buy now or pay small-small!</p>
-          <div class="hero-stats">
-            <div>
-              <h3>5,000+</h3>
-              <p>Happy Customers</p>
-            </div>
-            <div>
-              <h3>500+</h3>
-              <p>Installations This Month</p>
-            </div>
-            <div>
-              <h3>98%</h3>
-              <p>Customer Satisfaction</p>
-            </div>
-            <div>
-              <h3>24/7</h3>
-              <p>Support Available</p>
-            </div>
+          <div class="stat-item">
+            <span class="stat-number">500+</span>
+            <span class="stat-text">Installations This Month</span>
           </div>
-          <button class="btn btn-primary" id="shopNowBtn">
-            <i class="fas fa-bolt"></i> Shop Solar Products Now
-          </button>
+          <div class="stat-item">
+            <span class="stat-number">98%</span>
+            <span class="stat-text">Customer Satisfaction</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-number">24/7</span>
+            <span class="stat-text">Support Available</span>
+          </div>
         </div>
+        <button id="shopNowBtn" class="btn btn-primary animate__animated animate__pulse animate__infinite">
+          <i class="fas fa-bolt"></i> Shop Solar Products Now
+        </button>
       </div>
     </section>
 
     <section class="categories-section">
-        <div class="container">
-            <h2>Shop by Category</h2>
-            <div class="category-grid">
-                <a href="complete-systems.html" class="category-card" data-category="complete-systems">
-                    <i class="fas fa-solar-panel"></i>
-                    <h3>Complete Solar Systems</h3>
-                    <p>1kVA - 10kVA systems for homes & businesses</p>
-                </a>
-                <a href="power-banks.html" class="category-card" data-category="power-banks">
-                    <i class="fas fa-charging-station"></i>
-                    <h3>Solar Power Banks</h3>
-                    <p>Portable power solutions for phones & gadgets</p>
-                </a>
-                <a href="inverters.html" class="category-card" data-category="inverters">
-                    <i class="fas fa-bolt"></i>
-                    <h3>Inverters & Controllers</h3>
-                    <p>High-quality power conversion systems</p>
-                </a>
-                <a href="accessories.html" class="category-card" data-category="accessories">
-                    <i class="fas fa-toolbox"></i>
-                    <h3>Solar Accessories</h3>
-                    <p>Cables, mounting systems, and more</p>
-                </a>
-            </div>
+      <div class="container">
+        <h2>Shop by Category</h2>
+        <div class="category-grid">
+          <a href="complete-systems.html" class="category-card" data-category="complete-systems">
+            <div class="category-icon-container"><i class="fas fa-solar-panel"></i></div>
+            <h4>Complete Solar Systems</h4>
+            <p>1kVA - 10kVA systems for homes & businesses</p>
+          </a>
+          <a href="power-banks.html" class="category-card" data-category="power-banks">
+            <div class="category-icon-container"><i class="fas fa-battery-full"></i></div>
+            <h4>Solar Power Banks</h4>
+            <p>Portable power solutions for phones & gadgets</p>
+          </a>
+          <a href="inverters.html" class="category-card" data-category="inverters">
+            <div class="category-icon-container"><i class="fas fa-plug"></i></div>
+            <h4>Inverters & Controllers</h4>
+            <p>High-quality power conversion systems</p>
+          </a>
+          <a href="accessories.html" class="category-card" data-category="accessories">
+            <div class="category-icon-container"><i class="fas fa-toolbox"></i></div>
+            <h4>Solar Accessories</h4>
+            <p>Cables, mounting systems, and more</p>
+          </a>
         </div>
+      </div>
     </section>
 
     <section class="products-section" id="products">
       <div class="container">
+        <h2>Our Products</h2>
         <div class="filter-controls">
-          <input type="text" id="searchInput" placeholder="Search products...">
+          <input type="text" id="searchInput" placeholder="Search for products...">
           <select id="categoryFilter">
             <option value="all">All Categories</option>
             <option value="complete-systems">Complete Solar Systems</option>
-            <option value="power-banks">Solar Power Banks</option>
             <option value="inverters">Inverters & Controllers</option>
+            <option value="power-banks">Solar Power Banks</option>
             <option value="accessories">Solar Accessories</option>
           </select>
           <select id="priceFilter">
             <option value="all">All Prices</option>
-            <option value="low">Under ₦500k</option>
+            <option value="low">₦0 - ₦500k</option>
             <option value="medium">₦500k - ₦1M</option>
-            <option value="high">Over ₦1M</option>
+            <option value="high">₦1M+</option>
           </select>
         </div>
         <div class="products-grid" id="productsGrid">
           </div>
       </div>
     </section>
-
-    <div id="productModal" class="product-modal">
-      <div class="modal-content">
-        <span class="modal-close" id="modalCloseBtn">&times;</span>
-        <div class="modal-body">
-          <div class="modal-image">
-            <img id="modalImage" src="" alt="">
-          </div>
-          <div class="modal-info">
-            <h3 id="modalTitle"></h3>
-            <div class="product-rating">
-              <span class="stars">★★★★★</span>
-              <span class="rating-count" id="modalRating"></span>
-            </div>
-            <div class="modal-price">
-              <span class="current-price" id="modalPrice"></span>
-              <span class="original-price" id="modalOriginalPrice"></span>
-            </div>
-            <p id="modalDescription"></p>
-            <button class="btn btn-primary" id="modalAddToCartBtn">
-              <i class="fas fa-shopping-cart"></i> Add to Cart
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
   </main>
 
   <footer class="footer">
@@ -173,12 +151,53 @@
     </div>
   </footer>
 
+  <div id="adminModal" class="modal">
+    <div class="modal-content">
+      <span class="modal-close-btn" id="adminCloseBtn">&times;</span>
+      <h2>Admin Login</h2>
+      <form id="adminLoginForm">
+        <div class="form-group">
+          <label for="adminPassword">Password:</label>
+          <input type="password" id="adminPassword" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Login</button>
+      </form>
+    </div>
+  </div>
+
+  <div id="productModal" class="modal">
+    <div class="modal-content product-modal-content">
+      <span class="modal-close-btn" id="modalCloseBtn">&times;</span>
+      <div class="modal-product-details">
+        <div class="modal-image-container">
+          <img id="modalImage" src="" alt="Product Image">
+        </div>
+        <div class="modal-info">
+          <h2 id="modalTitle"></h2>
+          <p id="modalDescription"></p>
+          <div class="modal-rating">
+            <span class="stars">★★★★★</span>
+            <span id="modalRating"></span>
+          </div>
+          <div class="modal-price">
+            <span id="modalPrice" class="current-price"></span>
+            <span id="modalOriginalPrice" class="original-price"></span>
+          </div>
+          <button id="modalAddToCartBtn" class="btn btn-primary">
+            <i class="fas fa-shopping-cart"></i> Add to Cart
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div id="cartSidebar" class="cart-sidebar">
     <div class="cart-header">
       <h3>Shopping Cart</h3>
       <button class="cart-close-btn" id="cartCloseBtn">&times;</button>
     </div>
-    <div class="cart-items" id="cartItems"></div>
+    <div class="cart-items" id="cartItems">
+      </div>
     <div class="cart-summary">
       <div class="cart-total">
         <span>Total:</span>
@@ -188,17 +207,7 @@
     </div>
   </div>
 
-  <div id="adminModal" class="modal">
-    <div class="modal-content">
-      <span class="modal-close" id="adminCloseBtn">&times;</span>
-      <h3>Admin Login</h3>
-      <form id="adminLoginForm">
-        <input type="password" id="adminPassword" placeholder="Enter password" required>
-        <button type="submit" class="btn btn-primary">Login</button>
-      </form>
-    </div>
-  </div>
+  <script type="module" src="pawa.js"></script>
 
-  <script src="pawa.js"></script>
 </body>
 </html>
