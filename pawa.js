@@ -598,14 +598,17 @@ const handleFlutterwavePayment = (baseAmount) => {
         amount: finalAmount,
         currency: "NGN",
         country: "NG",
+        payment_options: "card,mobilemoney,ussd",
+        redirect_url: "https://pawa9ja.ng/order-success", // Replace with your success URL
         customer: {
-            email: email,
-            phone_number: phone,
-            name: name,
+            email: customerDetails.email,
+            phone_number: customerDetails.phoneNumber,
+            name: customerDetails.fullName,
         },
         customizations: {
-            title: "SolarHub",
-            description: "Payment for your solar products",
+            title: "Pawa+9ja Order",
+            description: "Payment for your solar products order",
+            logo: "https://pawa9ja.ng/logo.png", // Replace with your logo URL
         },
         callback: (response) => {
             if (response.status === 'successful') {
