@@ -879,3 +879,97 @@ body {
   border-radius: 15px;
   box-shadow: 0 5px 20px rgba(0,0,0,0.05);
     }
+
+/* --- New Styles for the Contact Page --- */
+.contact-section {
+    padding: 4rem 0;
+}
+
+.contact-subtitle {
+    text-align: center;
+    max-width: 600px;
+    margin: 0 auto 3rem;
+    color: var(--text-light);
+}
+
+.contact-content-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2.5rem;
+}
+
+.contact-form-container,
+.contact-info-container {
+    background: var(--bg-light);
+    padding: 2.5rem;
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+}
+
+.contact-form-container h3,
+.contact-info-container h3 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    color: var(--text-dark);
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    color: var(--text-dark);
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-family: 'Poppins', sans-serif;
+    resize: vertical; /* Allows the user to resize the textarea vertically */
+}
+
+.info-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.info-item i {
+    font-size: 1.5rem;
+    color: var(--primary-orange);
+}
+
+.info-item p {
+    margin: 0;
+    font-size: 1rem;
+    color: var(--text-dark);
+}
+
+.info-socials {
+    margin-top: 2rem;
+}
+
+.info-socials h4 {
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+}
+
+.info-socials a {
+    color: var(--text-dark);
+    font-size: 1.5rem;
+    margin-right: 1.5rem;
+    transition: color 0.3s;
+}
+
+.info-socials a:hover {
+    color: var(--primary-orange);
+}
+
