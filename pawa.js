@@ -1,44 +1,107 @@
+// This script is the core logic for the SolarHub e-commerce website.
+// It handles product data, cart management, UI interactions, and event listeners.
+
+// --- UI Components for dynamic messaging and modals ---
+
+// This is the HTML for the toast message component.
+const toastHTML = `
+  <div id="toastMessage" style="position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background-color: rgba(0, 0, 0, 0.75); color: white; padding: 15px 25px; border-radius: 10px; font-size: 1rem; z-index: 1000; opacity: 0; transition: opacity 0.5s ease; display: none; text-align: center; white-space: nowrap;">
+  </div>
+`;
+document.body.insertAdjacentHTML('beforeend', toastHTML);
+
+const showToastMessage = (message) => {
+    const toastElement = document.getElementById('toastMessage');
+    if (!toastElement) return;
+
+    toastElement.innerText = message;
+    toastElement.style.display = 'block';
+    toastElement.style.opacity = '1';
+
+    setTimeout(() => {
+        toastElement.style.opacity = '0';
+        setTimeout(() => {
+            toastElement.style.display = 'none';
+        }, 500);
+    }, 3000);
+};
+
+// HTML for the new checkout/contact modal
+const checkoutModalHTML = `
+  <div id="checkoutModal" class="modal-overlay" style="display: none;">
+    <div class="modal-content">
+      <span class="close-btn" id="checkoutCloseBtn">&times;</span>
+      <h3 id="checkoutTitle">Checkout</h3>
+      <p id="checkoutDescription"></p>
+      <form id="checkoutForm">
+        <div class="form-group">
+          <label for="name">Full Name:</label>
+          <input type="text" id="name" name="name" required>
+        </div>
+        <div class="form-group">
+          <label for="email">Email:</label>
+          <input type="email" id="email" name="email" required>
+        </div>
+        <div class="form-group">
+          <label for="phone">Phone Number:</label>
+          <input type="tel" id="phone" name="phone" required>
+        </div>
+        <div class="form-group">
+          <label for="address">Delivery Address:</label>
+          <textarea id="address" name="address" required></textarea>
+        </div>
+        <div class="form-group" id="swapInfoGroup" style="display:none;">
+          <label for="swapInfo">Further Information for Swap:</label>
+          <textarea id="swapInfo" name="swapInfo" placeholder="e.g., condition of your old device, preferred pick-up time, etc."></textarea>
+        </div>
+        <div class="form-group">
+          <label for="deliveryOption">Delivery Option:</label>
+          <select id="deliveryOption" name="deliveryOption">
+            <option value="free">Free Delivery (Lagos Only, up to 48hrs) - ₦0</option>
+            <option value="same-day">Same Day Delivery (Lagos Only) - ₦4,000</option>
+            <option value="outside-lagos">Delivery Outside Lagos - ₦10,000</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <input type="checkbox" id="saveDetails" name="saveDetails">
+          <label for="saveDetails">Save my details for future use</label>
+        </div>
+        <div class="form-group total-display">
+          <span>Total:</span>
+          <span id="finalAmount">₦0</span>
+        </div>
+        <button type="submit" class="btn btn-primary" id="placeOrderBtn">Make Payment</button>
+      </form>
+    </div>
+  </div>
+`;
+document.body.insertAdjacentHTML('beforeend', checkoutModalHTML);
+
 // Mock data for demonstration. In a real application, this would be fetched from a database.
 const products = [
     { id: 'solar-kit-1kva', name: '1kVA Solar Kit', description: 'Complete solar system for small homes and offices. Powers lights, fans, and a TV.', price: 450000, original_price: 500000, stock: 15, ratings: 4.8, category: 'complete-systems', imageUrl: 'https://pink-quiet-wolf-922.mypinata.cloud/ipfs/bafybeidxjelml6mvd2x233vxpgg3ycdh6odix6sh2ugijsyjiqbfkvd3lq', isHotDeal: true, paySmallSmall: true, swapAvailable: false },
     { id: 'power-bank-500w', name: '500W Solar Power Bank', description: 'Portable power bank for charging laptops, phones, and small appliances.', price: 120000, original_price: 135000, stock: 8, ratings: 4.5, category: 'power-banks', imageUrl: 'https://pink-quiet-wolf-922.mypinata.cloud/ipfs/bafybeicicd2k5s2ilg3y22wp67n6l2smfxuoch3yquxxhu64a6jiys7m3q', isHotDeal: false, paySmallSmall: true, swapAvailable: true },
     { id: 'inverter-3kva', name: '3kVA Pure Sine Wave Inverter', description: 'High-quality inverter for seamless power conversion. Perfect for home use.', price: 280000, original_price: null, stock: 22, ratings: 4.9, category: 'inverters', imageUrl: 'https://pink-quiet-wolf-922.mypinata.cloud/ipfs/bafybeigz6gxhmfkwjnkk3vs2m7n662bhxr6l3igxx5wzl5i4x2yc47gwbm', isHotDeal: true, paySmallSmall: true, swapAvailable: false },
-    { id: 'solar-panel-300w', name: '300W Solar Panel', description: 'High-efficiency monocrystalline solar panel for residential use.', price: 85000, original_price: 90000, stock: 5, ratings: 4.7, category: 'accessories', imageUrl: 'https://pink-quiet-wolf-922.mypinata.cloud/ipfs/bafybeidcvnuylhjlbtwncjfyvxmzuejsozuuzql3wld36luu4sqxbkmoti', isHotDeal: false, paySmallSmall: false, swapAvailable: false },
-    { id: 'battery-100ah', name: '100Ah Deep Cycle Battery', description: 'Reliable deep cycle battery for solar energy storage.', price: 150000, original_price: null, stock: 30, ratings: 4.6, category: 'accessories', imageUrl: 'https://placehold.co/500x350/f0f4f8/333?text=Battery+Image', isHotDeal: false, paySmallSmall: true, swapAvailable: false },
-    { id: 'solar-fan', name: '12-inch Solar Rechargeable Fan', description: 'Portable fan with built-in solar panel for charging.', price: 25000, original_price: null, stock: 50, ratings: 4.2, category: 'accessories', imageUrl: 'https://placehold.co/500x350/f0f4f8/333?text=Fan+Image', isHotDeal: true, paySmallSmall: false, swapAvailable: false },
-    { id: 'solar-kit-5kva', name: '5kVA Solar Kit', description: 'Robust solar system for powering large homes and businesses.', price: 950000, original_price: 1000000, stock: 10, ratings: 4.9, category: 'complete-systems', imageUrl: 'https://placehold.co/500x350/f0f4f8/333?text=5kVA+Solar+Kit', isHotDeal: false, paySmallSmall: true, swapAvailable: true },
-    { id: 'power-bank-1000w', name: '1000W Solar Power Bank', description: 'High-capacity power bank for heavy-duty appliances and tools.', price: 250000, original_price: null, stock: 12, ratings: 4.7, category: 'power-banks', imageUrl: 'https://placehold.co/500x350/f0f4f8/333?text=1000W+Bank', isHotDeal: true, paySmallSmall: false, swapAvailable: false }
+    { id: 'solar-panel-300w', name: '300W Solar Panel', description: 'High-efficiency monocrystalline solar panel for residential use.', price: 85000, original_price: 90000, stock: 5, ratings: 4.7, category: 'accessories', imageUrl: 'https://pink-quiet-wolf-922.mypinata.cloud/ipfs/bafybeidcvnuylhjlbtwncjfyvxmzuejsozuuzql3wld36luu4sqxbkmoti', isHotDeal: false, paySmallSmall: false, swapAvailable: false }
 ];
 
 let cart = JSON.parse(localStorage.getItem('solarhubCart')) || {};
-let userDetails = JSON.parse(localStorage.getItem('solarhubUser')) || {};
-const FLUTTERWAVE_PUBLIC_KEY = "FLWPUBK-05bb86af711fd1998eb529cb0bc4e0f4-X";
 
-// UI Toggles
+// --- UI Toggles ---
 const toggleCart = () => {
     document.getElementById('cartSidebar').classList.toggle('open');
 };
 
 const showAdminLogin = () => {
-    document.getElementById('adminModal').classList.add('open');
+    document.getElementById('adminModal').style.display = 'flex';
 };
 
 const hideAdminLogin = () => {
-    document.getElementById('adminModal').classList.remove('open');
+    document.getElementById('adminModal').style.display = 'none';
 };
 
 const toggleMenu = () => {
     document.getElementById('navLinks').classList.toggle('active');
-};
-
-// Custom modal for messages (replaces `alert()`)
-const showMessage = (message) => {
-    document.getElementById('messageText').innerText = message;
-    document.getElementById('messageModal').classList.add('open');
-};
-
-const hideMessage = () => {
-    document.getElementById('messageModal').classList.remove('open');
 };
 
 const showProductModal = (productId) => {
@@ -49,120 +112,137 @@ const showProductModal = (productId) => {
         document.getElementById('modalDescription').innerText = product.description;
         document.getElementById('modalRating').innerText = `(${product.ratings} ratings)`;
         document.getElementById('modalPrice').innerText = `₦${product.price.toLocaleString()}`;
-        
-        const originalPriceElem = document.getElementById('modalOriginalPrice');
         if (product.original_price) {
-            originalPriceElem.innerText = `₦${product.original_price.toLocaleString()}`;
+            document.getElementById('modalOriginalPrice').innerText = `₦${product.original_price.toLocaleString()}`;
         } else {
-            originalPriceElem.innerText = '';
+            document.getElementById('modalOriginalPrice').innerText = '';
         }
-        
         const modalAddToCartBtn = document.getElementById('modalAddToCartBtn');
         modalAddToCartBtn.onclick = () => {
             addToCart(productId);
             hideProductModal();
         };
-        document.getElementById('productModal').classList.add('open');
+        document.getElementById('productModal').style.display = 'flex';
     }
 };
 
 const hideProductModal = () => {
-    document.getElementById('productModal').classList.remove('open');
+    document.getElementById('productModal').style.display = 'none';
 };
 
-const showCheckoutModal = (action = 'checkout', productId = null) => {
-    let subtotal = 0;
-    if (action === 'checkout') {
-        // Calculate total for all items in the cart
-        subtotal = Object.values(cart).reduce((sum, item) => sum + (item.price * item.quantity), 0);
-    } else if (productId) {
-        // Calculate total for a single product
+// New function to show the checkout/contact modal
+const showCheckoutModal = (action, productId = null) => {
+    const modal = document.getElementById('checkoutModal');
+    const title = document.getElementById('checkoutTitle');
+    const description = document.getElementById('checkoutDescription');
+    const swapInfoGroup = document.getElementById('swapInfoGroup');
+    const form = document.getElementById('checkoutForm');
+    const finalAmount = document.getElementById('finalAmount');
+
+    // Load saved user details if available
+    const savedUserDetails = JSON.parse(localStorage.getItem('solarhubUserDetails'));
+    if (savedUserDetails) {
+        document.getElementById('name').value = savedUserDetails.name || '';
+        document.getElementById('email').value = savedUserDetails.email || '';
+        document.getElementById('phone').value = savedUserDetails.phone || '';
+        document.getElementById('address').value = savedUserDetails.address || '';
+    }
+
+    // Update modal content based on the action
+    swapInfoGroup.style.display = 'none';
+    form.onsubmit = null;
+    let productsToCheckout = [];
+    let baseAmount = 0;
+
+    if (action === 'buyNow' && productId) {
         const product = products.find(p => p.id === productId);
-        subtotal = product ? product.price : 0;
+        title.innerText = `Buy Now: ${product.name}`;
+        description.innerText = "Please provide your details to complete your order.";
+        productsToCheckout.push(product);
+        baseAmount = product.price;
+        form.onsubmit = (e) => handleFlutterwavePayment(e, productsToCheckout, baseAmount);
+    } else if (action === 'checkout') {
+        title.innerText = "Checkout";
+        description.innerText = "Please provide your details to complete your cart's order.";
+        productsToCheckout = Object.values(cart);
+        baseAmount = productsToCheckout.reduce((total, item) => total + (item.price * item.quantity), 0);
+        form.onsubmit = (e) => handleFlutterwavePayment(e, productsToCheckout, baseAmount);
+    } else if (action === 'paySmallSmall' && productId) {
+        const product = products.find(p => p.id === productId);
+        title.innerText = `Pay Small-Small: ${product.name}`;
+        description.innerText = "Provide your details to initiate a payment plan. You will be contacted shortly.";
+        baseAmount = product.price;
+        form.onsubmit = (e) => {
+            e.preventDefault();
+            const userData = {
+                name: document.getElementById('name').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value,
+                address: document.getElementById('address').value,
+            };
+            // Save details if selected
+            if (document.getElementById('saveDetails').checked) {
+                localStorage.setItem('solarhubUserDetails', JSON.stringify(userData));
+            }
+            showToastMessage("Thank you! A representative will contact you shortly to set up your payment plan.");
+            hideCheckoutModal();
+        };
+    } else if (action === 'swapAvailable' && productId) {
+        const product = products.find(p => p.id === productId);
+        title.innerText = `Swap Available: ${product.name}`;
+        description.innerText = "Provide your details and information about your device for a swap evaluation. A representative will contact you shortly.";
+        swapInfoGroup.style.display = 'block';
+        baseAmount = 0; // No initial payment for swap evaluation
+        form.onsubmit = (e) => {
+            e.preventDefault();
+            const userData = {
+                name: document.getElementById('name').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value,
+                address: document.getElementById('address').value,
+                swapInfo: document.getElementById('swapInfo').value
+            };
+            // Save details if selected
+            if (document.getElementById('saveDetails').checked) {
+                localStorage.setItem('solarhubUserDetails', JSON.stringify(userData));
+            }
+            showToastMessage("Thank you! We have received your swap request and will contact you shortly.");
+            hideCheckoutModal();
+        };
     }
 
-    // Set the initial subtotal in the UI
-    document.getElementById('subtotalAmount').innerText = `₦${subtotal.toLocaleString()}`;
+    // Update total amount on delivery option change
+    const deliveryOption = document.getElementById('deliveryOption');
+    deliveryOption.onchange = () => {
+        const deliveryFees = { 'free': 0, 'same-day': 4000, 'outside-lagos': 10000 };
+        const selectedFee = deliveryFees[deliveryOption.value];
+        const total = baseAmount + selectedFee;
+        finalAmount.innerText = `₦${total.toLocaleString()}`;
+    };
 
-    // Set the delivery fee to the default (Free) and calculate initial total
-    const deliveryOptions = document.getElementsByName('delivery');
-    for (const option of deliveryOptions) {
-        if (option.checked) {
-            document.getElementById('deliveryAmount').innerText = `₦${parseInt(option.value).toLocaleString()}`;
-            document.getElementById('finalTotalAmount').innerText = `₦${(subtotal + parseInt(option.value)).toLocaleString()}`;
-            break;
-        }
-    }
-    
-    // Check if user details are saved and show the option to use them
-    if (Object.keys(userDetails).length > 0) {
-        document.getElementById('savedDetailsSection').classList.remove('hidden');
-        document.getElementById('savedUserName').innerText = userDetails.fullName;
-    } else {
-        document.getElementById('savedDetailsSection').classList.add('hidden');
-    }
+    // Initial total amount calculation
+    deliveryOption.onchange();
 
-    // Prefill form if user details are loaded from localStorage
-    if (userDetails.fullName) {
-        document.getElementById('fullName').value = userDetails.fullName;
-        document.getElementById('email').value = userDetails.email;
-        document.getElementById('phoneNumber').value = userDetails.phoneNumber;
-        document.getElementById('deliveryAddress').value = userDetails.deliveryAddress;
-    }
-
-    // Clear additional info for new orders unless it's a swap request
-    const additionalInfoTextarea = document.getElementById('additionalInfo');
-    if (action !== 'swap') {
-        additionalInfoTextarea.value = '';
-        additionalInfoTextarea.placeholder = 'Please provide any special delivery instructions...';
-    } else {
-        additionalInfoTextarea.placeholder = 'Please provide details about the product you want to swap, its condition, and any questions you have.';
-    }
-
-    document.getElementById('checkoutModal').classList.add('open');
+    modal.style.display = 'flex';
 };
 
 const hideCheckoutModal = () => {
-    document.getElementById('checkoutModal').classList.remove('open');
+    document.getElementById('checkoutModal').style.display = 'none';
 };
 
-const calculateFinalTotal = () => {
-    let subtotal = 0;
-    // Calculate subtotal from cart
-    if (Object.keys(cart).length > 0) {
-        subtotal = Object.values(cart).reduce((sum, item) => sum + (item.price * item.quantity), 0);
-    } else {
-        // This is a single product checkout, so get the price from the modal's product id
-        const modalProductId = document.getElementById('modalAddToCartBtn').onclick.toString().match(/'(.*?)'/)[1];
-        const product = products.find(p => p.id === modalProductId);
-        if (product) subtotal = product.price;
-    }
-
-    const deliveryFee = parseInt(document.querySelector('input[name="delivery"]:checked').value);
-    const finalTotal = subtotal + deliveryFee;
-
-    document.getElementById('subtotalAmount').innerText = `₦${subtotal.toLocaleString()}`;
-    document.getElementById('deliveryAmount').innerText = `₦${deliveryFee.toLocaleString()}`;
-    document.getElementById('finalTotalAmount').innerText = `₦${finalTotal.toLocaleString()}`;
-};
-
-// User Actions
+// --- User Actions ---
 const handleAdminLogin = (e) => {
     e.preventDefault();
     const password = document.getElementById('adminPassword').value;
-    const adminMessage = document.getElementById('adminMessage');
 
-    // This is a simple mock. In a real app, this should be a secure API call.
     if (password === "admin123") {
-        adminMessage.classList.add('hidden');
+        showToastMessage("Login successful! Redirecting to Admin Dashboard.");
         sessionStorage.setItem('is_admin', 'true');
-        showMessage("Login successful! Redirecting to Admin Dashboard.");
         setTimeout(() => {
             window.location.href = 'admin.html';
-        }, 2000);
+        }, 1000);
     } else {
-        adminMessage.innerText = "Incorrect password.";
-        adminMessage.classList.remove('hidden');
+        showToastMessage("Incorrect password.");
     }
 };
 
@@ -175,20 +255,23 @@ const addToCart = (productId) => {
             cart[productId] = { ...product, quantity: 1 };
         }
         updateCartUI();
-        toggleCart();
+        showToastMessage(`${product.name} added to cart!`);
     }
 };
 
 const buyNow = (productId) => {
-    showCheckoutModal('buy', productId);
+    // Show checkout modal with 'buyNow' action
+    showCheckoutModal('buyNow', productId);
 };
 
 const paySmallSmall = (productId) => {
-    showCheckoutModal('pay-small-small', productId);
+    // Show checkout modal with 'paySmallSmall' action
+    showCheckoutModal('paySmallSmall', productId);
 };
 
 const swapAvailable = (productId) => {
-    showCheckoutModal('swap', productId);
+    // Show checkout modal with 'swapAvailable' action
+    showCheckoutModal('swapAvailable', productId);
 };
 
 const updateQuantity = (productId, change) => {
@@ -203,9 +286,10 @@ const updateQuantity = (productId, change) => {
 
 const checkout = () => {
     if (Object.keys(cart).length === 0) {
-        showMessage("Your cart is empty!");
+        showToastMessage("Your cart is empty!");
         return;
     }
+    // Show checkout modal with 'checkout' action
     showCheckoutModal('checkout');
 };
 
@@ -213,184 +297,176 @@ const scrollToProducts = () => {
     document.getElementById('products').scrollIntoView({ behavior: 'smooth' });
 };
 
-// Handle Flutterwave Payment
-const makePayment = (amount, customerDetails) => {
+// --- Payment Logic with Flutterwave ---
+const handleFlutterwavePayment = (e, productsToCheckout, baseAmount) => {
+    e.preventDefault();
+    
+    // Check if the Flutterwave script is loaded by
+    if (typeof FlutterwaveCheckout !== 'function') {
+        showToastMessage('Payment gateway not loaded. Please try refreshing the page.');
+        console.error('Flutterwave script not loaded.');
+        return;
+    }
+
+    const name = document.getElementById('name').value;
+    const email = document.getElementById('email').value;
+    const phone = document.getElementById('phone').value;
+    const address = document.getElementById('address').value;
+    const deliveryOption = document.getElementById('deliveryOption').value;
+
+    // Save user details if checked
+    if (document.getElementById('saveDetails').checked) {
+        const userData = { name, email, phone, address };
+        localStorage.setItem('solarhubUserDetails', JSON.stringify(userData));
+    }
+
+    // Calculate final amount with delivery fee
+    const deliveryFees = { 'free': 0, 'same-day': 4000, 'outside-lagos': 10000 };
+    const deliveryFee = deliveryFees[deliveryOption];
+    const finalAmount = baseAmount + deliveryFee;
+
+    // Initiate payment
     FlutterwaveCheckout({
-        public_key: FLUTTERWAVE_PUBLIC_KEY,
-        tx_ref: "pawa-" + Date.now(),
-        amount: amount,
+        public_key: "FLWPUBK-05bb86af711fd1998eb529cb0bc4e0f4-X",
+        tx_ref: "solarhub-" + Math.floor(Math.random() * 1000000), // Generate a unique transaction reference
+        amount: finalAmount,
         currency: "NGN",
-        payment_options: "card,mobilemoney,ussd",
-        redirect_url: "https://pawa9ja.ng/order-success", // Replace with your success URL
+        country: "NG",
         customer: {
-            email: customerDetails.email,
-            phone_number: customerDetails.phoneNumber,
-            name: customerDetails.fullName,
+            email: email,
+            phone_number: phone,
+            name: name,
         },
         customizations: {
-            title: "Pawa+9ja Order",
-            description: "Payment for your solar products order",
-            logo: "https://pawa9ja.ng/logo.png", // Replace with your logo URL
+            title: "SolarHub",
+            description: "Payment for your solar products",
         },
-        callback: function(data) {
-            // Check for successful payment and redirect
-            if (data.status === "successful") {
-                showMessage("Payment successful! Your order has been placed.");
-                // Clear cart after successful payment
+        callback: (response) => {
+            // This function is called after the payment is completed
+            if (response.status === 'successful') {
+                showToastMessage("Payment Successful! Your order has been placed.");
+                // Clear the cart on successful payment
                 cart = {};
                 updateCartUI();
                 hideCheckoutModal();
             } else {
-                showMessage("Payment failed. Please try again.");
+                showToastMessage("Payment Failed. Please try again.");
             }
         },
-        onClose: function() {
+        onclose: () => {
             // Modal closed by user
-            showMessage("Payment was cancelled.");
+            showToastMessage("Payment was cancelled.");
         }
     });
 };
 
-const handleCheckoutFormSubmit = (e) => {
-    e.preventDefault();
-
-    const fullName = document.getElementById('fullName').value;
-    const email = document.getElementById('email').value;
-    const phoneNumber = document.getElementById('phoneNumber').value;
-    const deliveryAddress = document.getElementById('deliveryAddress').value;
-    const additionalInfo = document.getElementById('additionalInfo').value;
-    const saveDetails = document.getElementById('saveDetails').checked;
-
-    const finalTotal = parseInt(document.getElementById('finalTotalAmount').innerText.replace(/₦|,/g, ''));
-
-    const customerDetails = {
-        fullName,
-        email,
-        phoneNumber,
-        deliveryAddress,
-        additionalInfo
-    };
-    
-    // Save details to localStorage if checkbox is checked
-    if (saveDetails) {
-        localStorage.setItem('solarhubUser', JSON.stringify(customerDetails));
-    }
-
-    // Initiate payment
-    makePayment(finalTotal, customerDetails);
-};
-
-const useSavedDetails = () => {
-    document.getElementById('fullName').value = userDetails.fullName;
-    document.getElementById('email').value = userDetails.email;
-    document.getElementById('phoneNumber').value = userDetails.phoneNumber;
-    document.getElementById('deliveryAddress').value = userDetails.deliveryAddress;
-};
-
-const clearSavedDetails = () => {
-    localStorage.removeItem('solarhubUser');
-    userDetails = {};
-    document.getElementById('savedDetailsSection').classList.add('hidden');
-    document.getElementById('fullName').value = '';
-    document.getElementById('email').value = '';
-    document.getElementById('phoneNumber').value = '';
-    document.getElementById('deliveryAddress').value = '';
-};
-
-// UI Updates
+// --- UI Updates ---
 const updateCartUI = () => {
     const cartContent = document.getElementById('cartItems');
+    if (!cartContent) return;
+
     cartContent.innerHTML = '';
     let total = 0;
 
-    if (Object.keys(cart).length === 0) {
-        cartContent.innerHTML = `<p class="text-center p-8 text-gray-500">Your cart is empty.</p>`;
+    const cartItems = Object.values(cart);
+    if (cartItems.length === 0) {
+        cartContent.innerHTML = `<p style="text-align:center; padding: 2rem;">Your cart is empty.</p>`;
     } else {
-        for (const id in cart) {
-            const item = cart[id];
+        cartItems.forEach(item => {
             total += item.price * item.quantity;
             const cartItemHTML = `
-                <div class="cart-item flex items-center space-x-4 p-4 border-b">
-                    <div class="flex-shrink-0 w-16 h-16 rounded-lg overflow-hidden">
-                        <img src="${item.imageUrl}" alt="${item.name}" class="w-full h-full object-cover">
+                <div class="cart-item">
+                    <div class="cart-item-image">
+                        <img src="${item.imageUrl}" alt="${item.name}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 8px;">
                     </div>
-                    <div class="flex-grow">
-                        <div class="font-bold text-gray-800">${item.name}</div>
-                        <div class="text-sm text-gray-600">₦${item.price.toLocaleString()}</div>
-                    </div>
-                    <div class="flex items-center space-x-2">
-                        <button class="qty-btn bg-gray-200 text-gray-700 w-6 h-6 rounded-full flex items-center justify-center hover:bg-gray-300" onclick="updateQuantity('${id}', -1)">-</button>
-                        <span class="font-bold">${item.quantity}</span>
-                        <button class="qty-btn bg-gray-200 text-gray-700 w-6 h-6 rounded-full flex items-center justify-center hover:bg-gray-300" onclick="updateQuantity('${id}', 1)">+</button>
+                    <div class="cart-item-info">
+                        <div class="cart-item-title">${item.name}</div>
+                        <div class="cart-item-price">₦${item.price.toLocaleString()}</div>
+                        <div class="quantity-controls">
+                            <button class="qty-btn" onclick="updateQuantity('${item.id}', -1)">-</button>
+                            <span>${item.quantity}</span>
+                            <button class="qty-btn" onclick="updateQuantity('${item.id}', 1)">+</button>
+                        </div>
                     </div>
                 </div>
             `;
             cartContent.innerHTML += cartItemHTML;
-        }
+        });
     }
 
-    const itemCount = Object.values(cart).reduce((sum, item) => sum + item.quantity, 0);
-    document.getElementById('cartCount').innerText = itemCount;
-    document.getElementById('totalAmount').innerText = `₦${total.toLocaleString()}`;
+    const itemCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+    const cartCountElement = document.getElementById('cartCount');
+    if (cartCountElement) {
+        cartCountElement.innerText = itemCount;
+    }
+
+    const totalAmountElement = document.getElementById('totalAmount');
+    if (totalAmountElement) {
+        totalAmountElement.innerText = `₦${total.toLocaleString()}`;
+    }
+
     localStorage.setItem('solarhubCart', JSON.stringify(cart));
 };
 
-const renderProducts = (productsToRender, elementId) => {
-    const grid = document.getElementById(elementId);
-    if (!grid) return;
+const renderProducts = (productsToRender) => {
+    const productsGrid = document.getElementById('productsGrid');
+    if (!productsGrid) return;
 
-    grid.innerHTML = '';
+    productsGrid.innerHTML = '';
     const productsToDisplay = productsToRender || products;
 
     if (productsToDisplay.length === 0) {
-        grid.innerHTML = '<p class="text-center p-8 text-gray-500">No products found.</p>';
+        productsGrid.innerHTML = '<p style="text-align:center; padding: 2rem;">No products found.</p>';
         return;
     }
 
-    productsToDisplay.forEach(product => {
-        const productCard = `
-            <div class="product-card bg-white rounded-2xl shadow-sm overflow-hidden relative cursor-pointer" data-id="${product.id}">
-                ${product.stock < 10 ? `<span class="product-badge bg-red-400 text-red-900 absolute top-4 left-4 text-xs px-2 py-1 rounded-full font-bold z-10">Limited Stock!</span>` : ''}
-                ${product.isHotDeal ? `<span class="hot-deal-badge bg-yellow-200 text-yellow-800 absolute top-4 right-4 text-xs px-2 py-1 rounded-full font-bold z-10">🔥 Hot Deal</span>` : ''}
-                <div class="product-image w-full h-48 overflow-hidden">
-                    <img src="${product.imageUrl}" alt="${product.name}" class="w-full h-full object-cover">
+    const productsHTML = productsToDisplay.map(product => `
+        <div class="product-card animate__animated animate__fadeInUp" data-id="${product.id}">
+            ${product.stock < 10 ? `<span class="product-badge">Limited Stock!</span>` : ''}
+            ${product.isHotDeal ? `<span class="hot-deal-badge">🔥 Hot Deal</span>` : ''}
+            <div class="product-image">
+                <img src="${product.imageUrl}" alt="${product.name}" style="width:100%; height:100%; object-fit: cover; border-radius: 15px 15px 0 0;">
+            </div>
+            <div class="product-info">
+                <h4 class="product-title">${product.name}</h4>
+                <div class="product-rating">
+                    <span class="stars">★★★★★</span>
+                    <span class="rating-count">(${product.ratings} ratings)</span>
                 </div>
-                <div class="product-info p-6">
-                    <h4 class="product-title text-lg font-bold mb-2">${product.name}</h4>
-                    <div class="flex items-center text-sm text-gray-500 mb-2">
-                        <span class="text-yellow-400 mr-1">★★★★★</span>
-                        <span>(${product.ratings} ratings)</span>
-                    </div>
-                    <div class="flex items-center space-x-2 mb-4">
-                        <span class="current-price text-xl font-bold text-orange-600">₦${product.price.toLocaleString()}</span>
-                        ${product.original_price ? `<span class="original-price text-sm text-gray-400 line-through">₦${product.original_price.toLocaleString()}</span>` : ''}
-                    </div>
-                    <div class="flex flex-col space-y-2">
-                        <button class="btn btn-primary bg-orange-600 text-white px-4 py-2 rounded-lg font-bold add-to-cart-btn" data-id="${product.id}">
-                            <i class="fas fa-shopping-cart mr-2"></i> Add to Cart
-                        </button>
-                        <button class="btn btn-secondary bg-gray-200 text-gray-800 px-4 py-2 rounded-lg font-bold buy-now-btn" data-id="${product.id}">Buy Now</button>
-                    </div>
-                    <div class="flex justify-between mt-4">
-                        ${product.paySmallSmall ? `<button class="btn btn-link text-sm text-orange-600 hover:underline pay-small-small-btn" data-id="${product.id}">Pay Small-Small</button>` : '<div></div>'}
-                        ${product.swapAvailable ? `<button class="btn btn-link text-sm text-gray-600 hover:underline swap-btn" data-id="${product.id}">Swap Available</button>` : '<div></div>'}
-                    </div>
+                <div class="product-price">
+                    <span class="current-price">₦${product.price.toLocaleString()}</span>
+                    ${product.original_price ? `<span class="original-price">₦${product.original_price.toLocaleString()}</span>` : ''}
+                </div>
+                <div class="product-actions">
+                    <button class="btn btn-primary add-to-cart-btn" data-id="${product.id}">
+                        <i class="fas fa-shopping-cart"></i> Add to Cart
+                    </button>
+                    <button class="btn btn-secondary buy-now-btn" data-id="${product.id}">Buy Now</button>
+                </div>
+                <div class="payment-options">
+                    ${product.paySmallSmall ? `<button class="btn btn-link pay-small-small-btn" data-id="${product.id}">Pay Small-Small</button>` : ''}
+                    ${product.swapAvailable ? `<button class="btn btn-link swap-btn" data-id="${product.id}">Swap Available</button>` : ''}
                 </div>
             </div>
-        `;
-        grid.innerHTML += productCard;
-    });
+        </div>
+    `).join('');
+
+    productsGrid.innerHTML = productsHTML;
 };
 
 const filterProducts = () => {
-    const searchTerm = (document.getElementById('searchInput') || document.getElementById('searchInputMobile')).value.toLowerCase();
-    const category = document.getElementById('categoryFilter').value;
-    const priceRange = document.getElementById('priceFilter').value;
+    const searchInput = document.getElementById('searchInput');
+    const categoryFilter = document.getElementById('categoryFilter');
+    const priceFilter = document.getElementById('priceFilter');
 
-    const filtered = products.filter(product => {
+    const searchTerm = searchInput ? searchInput.value.toLowerCase() : '';
+    const category = categoryFilter ? categoryFilter.value : 'all';
+    const priceRange = priceFilter ? priceFilter.value : 'all';
+
+    const filteredProducts = products.filter(product => {
         const matchesSearch = product.name.toLowerCase().includes(searchTerm) || product.description.toLowerCase().includes(searchTerm);
         const matchesCategory = category === 'all' || product.category === category;
-        
+
         let matchesPrice = true;
         if (priceRange !== 'all') {
             const price = product.price;
@@ -398,28 +474,11 @@ const filterProducts = () => {
             if (priceRange === 'medium') matchesPrice = price > 500000 && price <= 1000000;
             if (priceRange === 'high') matchesPrice = price > 1000000;
         }
+
         return matchesSearch && matchesCategory && matchesPrice;
     });
 
-    renderProducts(filtered, 'productsGrid');
-};
-
-const filterByCategory = (category) => {
-    const filtered = products.filter(p => p.category === category);
-    renderProducts(filtered, 'productsGrid');
-    
-    document.getElementById('categoryFilter').value = category;
-
-    document.querySelectorAll('.category-nav a').forEach(link => link.classList.remove('active'));
-    const clickedLink = document.querySelector(`.category-nav a[data-category="${category}"]`);
-    if (clickedLink) clickedLink.classList.add('active');
-
-    scrollToProducts();
-};
-
-const renderHotDeals = () => {
-    const hotDeals = products.filter(p => p.isHotDeal);
-    renderProducts(hotDeals, 'hotDealsGrid');
+    renderProducts(filteredProducts);
 };
 
 // Countdown Timer Logic
@@ -428,7 +487,7 @@ const countdown = () => {
     if (!timerElement) return;
 
     let totalSeconds = 48 * 60 * 60; // 48 hours in seconds
-    
+
     const interval = setInterval(() => {
         if (totalSeconds <= 0) {
             clearInterval(interval);
@@ -439,41 +498,54 @@ const countdown = () => {
         const hours = Math.floor(totalSeconds / 3600);
         const minutes = Math.floor((totalSeconds % 3600) / 60);
         const seconds = totalSeconds % 60;
-        
+
         timerElement.innerHTML = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
     }, 1000);
 };
 
-// Initial calls and Event Listeners
+// --- Initial calls and Event Listeners ---
 document.addEventListener('DOMContentLoaded', () => {
-    renderProducts(products, 'productsGrid');
-    renderHotDeals();
+    // Check if we are on a category page and filter products
+    const pageCategory = document.body.dataset.category;
+    if (pageCategory) {
+        const filtered = products.filter(p => p.category === pageCategory);
+        renderProducts(filtered);
+        // Add active class to the correct category link
+        const categoryLinks = document.querySelectorAll('.category-nav a');
+        categoryLinks.forEach(link => {
+            if (link.href.includes(pageCategory)) {
+                link.classList.add('active');
+            } else {
+                link.classList.remove('active');
+            }
+        });
+    } else {
+        renderProducts(products);
+    }
+
     updateCartUI();
     countdown();
 
-    // UI Toggles
-    document.getElementById('menuIcon').addEventListener('click', toggleMenu);
-    document.getElementById('cartIcon').addEventListener('click', toggleCart);
-    document.getElementById('cartCloseBtn').addEventListener('click', toggleCart);
-    document.getElementById('adminLink').addEventListener('click', (e) => { e.preventDefault(); showAdminLogin(); });
-    document.getElementById('adminCloseBtn').addEventListener('click', hideAdminLogin);
-    document.getElementById('shopNowBtn').addEventListener('click', scrollToProducts);
+    // Event listeners for UI Toggles
+    document.getElementById('menuIcon')?.addEventListener('click', toggleMenu);
+    document.getElementById('cartIcon')?.addEventListener('click', toggleCart);
+    document.getElementById('cartCloseBtn')?.addEventListener('click', toggleCart);
+    document.getElementById('adminLink')?.addEventListener('click', showAdminLogin);
+    document.getElementById('adminCloseBtn')?.addEventListener('click', hideAdminLogin);
+    document.getElementById('shopNowBtn')?.addEventListener('click', scrollToProducts);
+    document.getElementById('checkoutBtn')?.addEventListener('click', checkout);
+    document.getElementById('checkoutCloseBtn')?.addEventListener('click', hideCheckoutModal);
 
-    // Modals
-    document.getElementById('modalCloseBtn').addEventListener('click', hideProductModal);
-    document.getElementById('messageCloseBtn').addEventListener('click', hideMessage);
-    document.getElementById('messageOkBtn').addEventListener('click', hideMessage);
-    document.getElementById('checkoutCloseBtn').addEventListener('click', hideCheckoutModal);
-
-    // Product actions - Event delegation for multiple buttons
+    // Event delegation for product card buttons
     const productsGrid = document.getElementById('productsGrid');
     if (productsGrid) {
         productsGrid.addEventListener('click', (event) => {
             const target = event.target;
             const productCard = target.closest('.product-card');
             if (!productCard) return;
+
             const productId = productCard.dataset.id;
-            
+
             if (target.closest('.add-to-cart-btn')) {
                 event.stopPropagation();
                 addToCart(productId);
@@ -491,37 +563,19 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
-    
-    // Delivery option change listener
-    const deliveryOptions = document.querySelectorAll('input[name="delivery"]');
-    deliveryOptions.forEach(option => {
-        option.addEventListener('change', calculateFinalTotal);
-    });
 
-    // Checkout button listener
-    document.getElementById('checkoutBtn').addEventListener('click', checkout);
-    document.getElementById('checkoutForm').addEventListener('submit', handleCheckoutFormSubmit);
+    // Event listeners for modal and search functionality
+    document.getElementById('modalCloseBtn')?.addEventListener('click', hideProductModal);
+    document.getElementById('searchInput')?.addEventListener('keyup', filterProducts);
+    document.getElementById('categoryFilter')?.addEventListener('change', filterProducts);
+    document.getElementById('priceFilter')?.addEventListener('change', filterProducts);
+    document.getElementById('adminLoginForm')?.addEventListener('submit', handleAdminLogin);
 
-    // User details management buttons
-    document.getElementById('useSavedDetailsBtn').addEventListener('click', useSavedDetails);
-    document.getElementById('clearSavedDetailsBtn').addEventListener('click', clearSavedDetails);
-
-    // Search and Filters
-    document.getElementById('searchInput').addEventListener('keyup', filterProducts);
-    const searchInputMobile = document.getElementById('searchInputMobile');
-    if (searchInputMobile) searchInputMobile.addEventListener('keyup', filterProducts);
-    document.getElementById('categoryFilter').addEventListener('change', filterProducts);
-    document.getElementById('priceFilter').addEventListener('change', filterProducts);
-    
-    // Category links - Event delegation
+    // Event delegation for category cards
     document.querySelectorAll('.category-card').forEach(card => {
-        card.addEventListener('click', (e) => {
-            e.preventDefault();
+        card.addEventListener('click', () => {
             const category = card.dataset.category;
-            filterByCategory(category);
+            window.location.href = `${category}.html`;
         });
     });
-
-    // Admin login
-    document.getElementById('adminLoginForm').addEventListener('submit', handleAdminLogin);
 });
