@@ -42,7 +42,7 @@ const checkoutModalHTML = `
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 1000;
+    z-index: 1000; /* Increased z-index to be on top of the cart sidebar */
 }
 .modal-content {
     background: #fff;
@@ -569,6 +569,12 @@ const handleFlutterwavePayment = (baseAmount) => {
     const phone = document.getElementById('phone').value;
     const address = document.getElementById('address').value;
     const deliveryOption = document.querySelector('input[name="deliveryOption"]:checked').value;
+
+    // Client-side validation for email
+    if (!email || !email.includes('@')) {
+        showToastMessage('Please enter a valid email address to proceed.');
+        return;
+    }
 
     if (document.getElementById('saveDetails').checked) {
         const userData = { name, email, phone, address };
