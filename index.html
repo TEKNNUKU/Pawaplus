@@ -8,6 +8,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+  <!-- Flutterwave inline checkout script -->
+  <script src="https://checkout.flutterwave.com/v3.js"></script>
 
   <style>
     :root {
@@ -33,7 +35,7 @@
       background: var(--white);
       color: var(--text-dark);
       line-height: 1.6;
-      overflow-x: hidden; /* This is the key fix for horizontal overflow */
+      overflow-x: hidden;
     }
 
     .container {
@@ -676,20 +678,25 @@
       margin-bottom: 1rem;
     }
 
-    .product-modal {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0,0,0,0.8);
-      z-index: 2500;
-      justify-content: center;
-      align-items: center;
+    /* --- Modals --- */
+    .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.8);
+        z-index: 2500;
+        justify-content: center;
+        align-items: center;
+    }
+    
+    .modal.open {
+        display: flex;
     }
 
-    .product-modal-content {
+    .modal-content {
       background: var(--white);
       border-radius: 15px;
       padding: 2rem;
@@ -698,6 +705,23 @@
       max-height: 90vh;
       overflow-y: auto;
       position: relative;
+    }
+
+    .modal-content h2 {
+        margin-bottom: 1.5rem;
+        color: var(--text-dark);
+        font-weight: 600;
+    }
+
+    .modal-content .close-btn {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        font-size: 2rem;
+        z-index: 10;
+    }
+
+    .product-modal-content {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 2rem;
@@ -725,30 +749,9 @@
       flex-direction: column;
     }
 
-    .admin-modal {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0,0,0,0.8);
-      z-index: 3000;
-      justify-content: center;
-      align-items: center;
-    }
-
     .admin-modal-content {
-      background: var(--white);
-      border-radius: 15px;
-      padding: 2rem;
-      width: 90%;
       max-width: 400px;
       text-align: center;
-    }
-
-    .admin-modal-content h2 {
-      margin-bottom: 1.5rem;
     }
 
     .admin-modal-content input {
@@ -757,6 +760,78 @@
       margin-bottom: 1rem;
       border: 1px solid #ccc;
       border-radius: 8px;
+    }
+    
+    .message-modal .modal-content {
+        max-width: 400px;
+        text-align: center;
+    }
+
+    /* Checkout Modal specific styles */
+    .checkout-form label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 500;
+    }
+    .checkout-form input, .checkout-form textarea {
+        width: 100%;
+        padding: 0.8rem;
+        margin-bottom: 1.5rem;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        font-family: 'Poppins', sans-serif;
+    }
+    .checkout-form textarea {
+        resize: vertical;
+        min-height: 100px;
+    }
+
+    .delivery-options {
+        margin-bottom: 1.5rem;
+    }
+
+    .delivery-option {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        background: #f0f0f0;
+        padding: 1rem;
+        border-radius: 8px;
+        margin-bottom: 0.75rem;
+        cursor: pointer;
+        transition: background-color 0.2s;
+    }
+
+    .delivery-option:hover {
+        background: #e0e0e0;
+    }
+
+    .delivery-option input[type="radio"] {
+        margin: 0;
+        cursor: pointer;
+    }
+
+    .summary-section {
+        border-top: 1px solid #eee;
+        padding-top: 1.5rem;
+        margin-top: 1.5rem;
+    }
+    .summary-item {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 0.5rem;
+    }
+    .summary-item.total {
+        font-weight: 700;
+        font-size: 1.25rem;
+        color: var(--primary-orange);
+    }
+    .summary-item.total span:last-child {
+        font-size: 1.5rem;
+    }
+    
+    .hidden {
+        display: none !important;
     }
 
     /* --- Mobile Optimization --- */
@@ -903,22 +978,22 @@
     <div class="container">
       <h2 class="section-title">Shop by Category</h2>
       <div class="categories-grid">
-        <a href="complete-systems.html" class="category-card" data-category="complete-systems">
+        <a href="#" class="category-card" data-category="complete-systems">
           <div class="category-icon"><i class="fas fa-solar-panel"></i></div>
           <h3 class="category-title">Complete Solar Systems</h3>
           <p>1kVA - 10kVA systems for homes & businesses</p>
         </a>
-        <a href="power-banks.html" class="category-card" data-category="power-banks">
+        <a href="#" class="category-card" data-category="power-banks">
           <div class="category-icon"><i class="fas fa-battery-full"></i></div>
           <h3 class="category-title">Solar Power Banks</h3>
           <p>Portable power solutions for phones & gadgets</p>
         </a>
-        <a href="inverters.html" class="category-card" data-category="inverters">
+        <a href="#" class="category-card" data-category="inverters">
           <div class="category-icon"><i class="fas fa-plug"></i></div>
           <h3 class="category-title">Inverters & Controllers</h3>
           <p>High-quality power conversion systems</p>
         </a>
-        <a href="accessories.html" class="category-card" data-category="accessories">
+        <a href="#" class="category-card" data-category="accessories">
           <div class="category-icon"><i class="fas fa-tools"></i></div>
           <h3 class="category-title">Solar Accessories</h3>
           <p>Cables, mounting systems, and more</p>
@@ -1061,6 +1136,7 @@
     </div>
   </footer>
 
+  <!-- Cart Sidebar -->
   <div class="cart-sidebar" id="cartSidebar">
     <div class="cart-header">
       <h3 class="cart-title">Your Cart</h3>
@@ -1078,8 +1154,9 @@
     </div>
   </div>
 
-  <div class="product-modal" id="productModal">
-    <div class="product-modal-content">
+  <!-- Product Modal -->
+  <div class="modal" id="productModal">
+    <div class="modal-content product-modal-content">
       <button class="close-btn" id="modalCloseBtn" style="position: absolute; top: 1rem; right: 1rem;">&times;</button>
       <div class="product-modal-image">
         <img id="modalImage" src="" alt="Product Image">
@@ -1100,8 +1177,9 @@
     </div>
   </div>
 
-  <div class="admin-modal" id="adminModal">
-    <div class="admin-modal-content">
+  <!-- Admin Modal -->
+  <div class="modal" id="adminModal">
+    <div class="modal-content admin-modal-content">
       <button class="close-btn" id="adminCloseBtn" style="position: absolute; top: 1rem; right: 1rem;">&times;</button>
       <h2>Admin Login</h2>
       <form id="adminLoginForm">
@@ -1110,6 +1188,89 @@
         <button type="submit" class="btn btn-primary">Login</button>
       </form>
     </div>
+  </div>
+
+  <!-- Message Modal -->
+  <div class="modal message-modal" id="messageModal">
+    <div class="modal-content">
+      <button class="close-btn" id="messageCloseBtn">&times;</button>
+      <h2>Pawa+9ja</h2>
+      <p id="messageText" style="margin-bottom: 1.5rem;"></p>
+      <button class="btn btn-primary" id="messageOkBtn">OK</button>
+    </div>
+  </div>
+
+  <!-- New Checkout Modal -->
+  <div class="modal" id="checkoutModal">
+      <div class="modal-content">
+          <button class="close-btn" id="checkoutCloseBtn">&times;</button>
+          <h2>Complete Your Order</h2>
+          <form id="checkoutForm">
+              <div class="saved-details hidden" id="savedDetailsSection">
+                  <p>Welcome back, <span id="savedUserName" class="font-bold"></span>!</p>
+                  <button type="button" class="btn btn-link text-sm mt-1" id="useSavedDetailsBtn">Use My Saved Details</button>
+                  <button type="button" class="btn btn-link text-sm mt-1" id="clearSavedDetailsBtn">Clear My Saved Details</button>
+                  <p class="text-sm text-gray-500 mt-2">Saved details will be pre-filled below.</p>
+              </div>
+              <div class="form-fields">
+                  <label for="fullName">Full Name</label>
+                  <input type="text" id="fullName" name="fullName" placeholder="John Doe" required>
+                  
+                  <label for="email">Email Address</label>
+                  <input type="email" id="email" name="email" placeholder="john.doe@example.com" required>
+
+                  <label for="phoneNumber">Phone Number</label>
+                  <input type="tel" id="phoneNumber" name="phoneNumber" placeholder="+2348012345678" required>
+
+                  <label for="deliveryAddress">Delivery Address</label>
+                  <textarea id="deliveryAddress" name="deliveryAddress" placeholder="123 Solar Street, Lagos" required></textarea>
+
+                  <label for="additionalInfo">Additional Info (e.g., for Swap requests)</label>
+                  <textarea id="additionalInfo" name="additionalInfo" placeholder="Please provide details about the product you want to swap."></textarea>
+              </div>
+
+              <div class="delivery-options">
+                  <label>Select Delivery Option</label>
+                  <div class="delivery-option">
+                      <input type="radio" id="deliveryFree" name="delivery" value="0" data-description="Lagos Only, up to 48 hours" checked>
+                      <label for="deliveryFree" class="flex-1 font-semibold">Free Delivery</label>
+                      <span class="text-gray-600 text-sm">₦0</span>
+                  </div>
+                  <div class="delivery-option">
+                      <input type="radio" id="deliverySameDay" name="delivery" value="4000" data-description="Lagos Only, same day">
+                      <label for="deliverySameDay" class="flex-1 font-semibold">Same Day Delivery</label>
+                      <span class="text-gray-600 text-sm">₦4,000</span>
+                  </div>
+                  <div class="delivery-option">
+                      <input type="radio" id="deliveryOutsideLagos" name="delivery" value="10000" data-description="Outside Lagos, up to 5 business days">
+                      <label for="deliveryOutsideLagos" class="flex-1 font-semibold">Delivery Outside Lagos</label>
+                      <span class="text-gray-600 text-sm">₦10,000</span>
+                  </div>
+              </div>
+
+              <div class="summary-section">
+                  <div class="summary-item">
+                      <span>Subtotal:</span>
+                      <span id="subtotalAmount">₦0</span>
+                  </div>
+                  <div class="summary-item">
+                      <span>Delivery Fee:</span>
+                      <span id="deliveryAmount">₦0</span>
+                  </div>
+                  <div class="summary-item total">
+                      <span>Total:</span>
+                      <span id="finalTotalAmount">₦0</span>
+                  </div>
+              </div>
+
+              <div class="mt-4">
+                  <input type="checkbox" id="saveDetails" name="saveDetails">
+                  <label for="saveDetails">Save my details for future purchases</label>
+              </div>
+
+              <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1.5rem;">Proceed to Payment</button>
+          </form>
+      </div>
   </div>
 
   <script src="pawa.js"></script>
