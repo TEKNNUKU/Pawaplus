@@ -606,7 +606,6 @@ const handleFlutterwavePayment = (baseAmount) => {
         customizations: {
             title: "Pawa+9ja Order",
             description: "Payment for your solar products order",
-            logo: "https://pawa9ja.ng/logo.png", // Replace with your logo URL
         },
         callback: (response) => {
             if (response.status === 'successful') {
