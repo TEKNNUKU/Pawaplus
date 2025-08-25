@@ -623,42 +623,6 @@ const handleFlutterwavePayment = (baseAmount) => {
     });
 };
 
-     FlutterwaveCheckout({
-        public_key: "FLWPUBK-05bb86af711fd1998eb529cb0bc4e0f4-X",
-        tx_ref: "pawa-" + Math.floor(Math.random() * 1000000),
-        amount: amount,
-        currency: "NGN",
-        payment_options: "card,mobilemoney,ussd",
-        redirect_url: "https://pawa9ja.ng/order-success", // Replace with your success URL
-        customer: {
-            email: customerDetails.email,
-            phone_number: customerDetails.phoneNumber,
-            name: customerDetails.fullName,
-        },
-        customizations: {
-            title: "Pawa+9ja Order",
-            description: "Payment for your solar products order",
-            logo: "https://pawa9ja.ng/logo.png", // Replace with your logo URL
-        },
-        callback: function(data) {
-            // Check for successful payment and redirect
-            if (data.status === "successful") {
-                showMessage("Payment successful! Your order has been placed.");
-                // Clear cart after successful payment
-                cart = {};
-                updateCartUI();
-                hideCheckoutModal();
-            } else {
-                showMessage("Payment failed. Please try again.");
-            }
-        },
-        onClose: function() {
-            // Modal closed by user
-            showMessage("Payment was cancelled.");
-        }
-    });
-};
-
 // --- UI Updates ---
 const updateCartUI = () => {
     const cartContent = document.getElementById('cartItems');
