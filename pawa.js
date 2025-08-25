@@ -26,10 +26,12 @@ const showToastMessage = (message) => {
     }, 3000);
 };
 
-// HTML for the new, redesigned checkout/contact modal
+// --- MODAL HTML DEFINITIONS ---
+
+// Checkout/Buy Now Modal
 const checkoutModalHTML = `
 <style>
-/* Basic Modal Styles */
+/* Modal and Form Styles */
 .modal-overlay {
     position: fixed;
     top: 0;
@@ -169,7 +171,7 @@ const checkoutModalHTML = `
 </style>
   <div id="checkoutModal" class="modal-overlay" style="display: none;">
     <div class="modal-content">
-      <span class="close-btn" id="checkoutCloseBtn">&times;</span>
+      <span class="close-btn checkout-close-btn">&times;</span>
       <h3 class="modal-title" id="checkoutTitle">Complete Your Order</h3>
       <form id="checkoutForm">
         <div class="form-group">
@@ -188,11 +190,7 @@ const checkoutModalHTML = `
           <label for="address">Delivery Address</label>
           <textarea id="address" name="address" required></textarea>
         </div>
-        <div class="form-group" id="swapInfoGroup" style="display:none;">
-          <label for="swapInfo">Additional Info (e.g., for Swap requests)</label>
-          <textarea id="swapInfo" name="swapInfo" placeholder="Please provide details about the item you want to swap, its condition, etc."></textarea>
-        </div>
-        
+
         <div class="delivery-options-group">
           <label>Select Delivery Option</label>
           <div class="delivery-option">
@@ -243,6 +241,80 @@ const checkoutModalHTML = `
 `;
 document.body.insertAdjacentHTML('beforeend', checkoutModalHTML);
 
+// Pay Small-Small Modal
+const paySmallSmallModalHTML = `
+  <div id="paySmallSmallModal" class="modal-overlay" style="display: none;">
+    <div class="modal-content">
+      <span class="close-btn pss-close-btn">&times;</span>
+      <h3 class="modal-title">Request a Payment Plan</h3>
+      <p style="text-align: center; margin-bottom: 1.5rem;">Please provide your details and a representative will contact you shortly to set up a flexible payment plan.</p>
+      <form id="paySmallSmallForm">
+        <div class="form-group">
+          <label for="pss-name">Full Name</label>
+          <input type="text" id="pss-name" name="name" required>
+        </div>
+        <div class="form-group">
+          <label for="pss-email">Email</label>
+          <input type="email" id="pss-email" name="email" required>
+        </div>
+        <div class="form-group">
+          <label for="pss-phone">Phone Number</label>
+          <input type="tel" id="pss-phone" name="phone" required>
+        </div>
+        <div class="form-group">
+          <label for="pss-address">Delivery Address</label>
+          <textarea id="pss-address" name="address" required></textarea>
+        </div>
+        <div class="save-details-checkbox">
+            <input type="checkbox" id="pss-saveDetails" name="saveDetails">
+            <label for="pss-saveDetails">Save my details</label>
+        </div>
+        <button type="submit" class="btn-proceed">Submit Request</button>
+      </form>
+    </div>
+  </div>
+`;
+document.body.insertAdjacentHTML('beforeend', paySmallSmallModalHTML);
+
+// Swap Available Modal
+const swapModalHTML = `
+  <div id="swapModal" class="modal-overlay" style="display: none;">
+    <div class="modal-content">
+      <span class="close-btn swap-close-btn">&times;</span>
+      <h3 class="modal-title">Request a Product Swap</h3>
+      <p style="text-align: center; margin-bottom: 1.5rem;">Please provide your details and information about the device you'd like to swap.</p>
+      <form id="swapForm">
+        <div class="form-group">
+          <label for="swap-name">Full Name</label>
+          <input type="text" id="swap-name" name="name" required>
+        </div>
+        <div class="form-group">
+          <label for="swap-email">Email</label>
+          <input type="email" id="swap-email" name="email" required>
+        </div>
+        <div class="form-group">
+          <label for="swap-phone">Phone Number</label>
+          <input type="tel" id="swap-phone" name="phone" required>
+        </div>
+        <div class="form-group">
+          <label for="swap-address">Delivery Address</label>
+          <textarea id="swap-address" name="address" required></textarea>
+        </div>
+        <div class="form-group">
+          <label for="swapInfo">Details of your device for swapping</label>
+          <textarea id="swapInfo" name="swapInfo" required placeholder="e.g., Device type (e.g., 2kva inverter), condition (e.g., used for 2 years, works well), any known issues."></textarea>
+        </div>
+        <div class="save-details-checkbox">
+            <input type="checkbox" id="swap-saveDetails" name="saveDetails">
+            <label for="swap-saveDetails">Save my details</label>
+        </div>
+        <button type="submit" class="btn-proceed">Submit Swap Request</button>
+      </form>
+    </div>
+  </div>
+`;
+document.body.insertAdjacentHTML('beforeend', swapModalHTML);
+
 // Mock data for demonstration. In a real application, this would be fetched from a database.
 const products = [
     { id: 'solar-kit-1kva', name: '1kVA Solar Kit', description: 'Complete solar system for small homes and offices. Powers lights, fans, and a TV.', price: 450000, original_price: 500000, stock: 15, ratings: 4.8, category: 'complete-systems', imageUrl: 'https://pink-quiet-wolf-922.mypinata.cloud/ipfs/bafybeidxjelml6mvd2x233vxpgg3ycdh6odix6sh2ugijsyjiqbfkvd3lq', isHotDeal: true, paySmallSmall: true, swapAvailable: false },
@@ -253,7 +325,7 @@ const products = [
 
 let cart = JSON.parse(localStorage.getItem('solarhubCart')) || {};
 
-// --- UI Toggles ---
+// --- UI Toggles and Handlers ---
 const toggleCart = () => {
     document.getElementById('cartSidebar').classList.toggle('open');
 };
@@ -296,105 +368,44 @@ const hideProductModal = () => {
     document.getElementById('productModal').style.display = 'none';
 };
 
-// New function to show the checkout/contact modal
 const showCheckoutModal = (action, productId = null) => {
     const modal = document.getElementById('checkoutModal');
     const title = document.getElementById('checkoutTitle');
-    const swapInfoGroup = document.getElementById('swapInfoGroup');
-    const form = document.getElementById('checkoutForm');
     const subtotalAmount = document.getElementById('subtotalAmount');
     const deliveryFeeAmount = document.getElementById('deliveryFeeAmount');
     const finalAmount = document.getElementById('finalAmount');
-    const saveDetailsCheckbox = document.getElementById('saveDetails');
     const deliveryOptionRadios = document.querySelectorAll('input[name="deliveryOption"]');
 
-    // Load saved user details if available
+    // Load saved user details
     const savedUserDetails = JSON.parse(localStorage.getItem('solarhubUserDetails'));
     if (savedUserDetails) {
         document.getElementById('name').value = savedUserDetails.name || '';
         document.getElementById('email').value = savedUserDetails.email || '';
         document.getElementById('phone').value = savedUserDetails.phone || '';
         document.getElementById('address').value = savedUserDetails.address || '';
-        saveDetailsCheckbox.checked = true;
+        document.getElementById('saveDetails').checked = true;
     } else {
-        saveDetailsCheckbox.checked = false;
+        document.getElementById('saveDetails').checked = false;
     }
 
-    // Reset form and UI
-    form.reset();
-    swapInfoGroup.style.display = 'none';
-    subtotalAmount.innerText = '₦0';
-    deliveryFeeAmount.innerText = '₦0';
-    finalAmount.innerText = '₦0';
-
-    let productsToCheckout = [];
+    // Set base amount based on action
     let baseAmount = 0;
-
     if (action === 'buyNow' && productId) {
         const product = products.find(p => p.id === productId);
+        baseAmount = product.price;
         title.innerText = `Buy Now: ${product.name}`;
-        productsToCheckout.push(product);
-        baseAmount = product.price;
-        form.onsubmit = (e) => handleFlutterwavePayment(e, productsToCheckout, baseAmount);
     } else if (action === 'checkout') {
-        title.innerText = "Complete Your Order";
-        productsToCheckout = Object.values(cart);
-        baseAmount = productsToCheckout.reduce((total, item) => total + (item.price * item.quantity), 0);
-        form.onsubmit = (e) => handleFlutterwavePayment(e, productsToCheckout, baseAmount);
-    } else if (action === 'paySmallSmall' && productId) {
-        const product = products.find(p => p.id === productId);
-        title.innerText = `Pay Small-Small: ${product.name}`;
-        baseAmount = product.price;
-        document.getElementById('placeOrderBtn').innerText = "Submit Request";
-        form.onsubmit = (e) => {
-            e.preventDefault();
-            const userData = {
-                name: document.getElementById('name').value,
-                email: document.getElementById('email').value,
-                phone: document.getElementById('phone').value,
-                address: document.getElementById('address').value,
-            };
-            // Save details if selected
-            if (saveDetailsCheckbox.checked) {
-                localStorage.setItem('solarhubUserDetails', JSON.stringify(userData));
-            }
-            showToastMessage("Thank you! A representative will contact you shortly to set up your payment plan.");
-            hideCheckoutModal();
-        };
-    } else if (action === 'swapAvailable' && productId) {
-        const product = products.find(p => p.id === productId);
-        title.innerText = `Swap Available: ${product.name}`;
-        swapInfoGroup.style.display = 'block';
-        baseAmount = 0;
-        document.getElementById('placeOrderBtn').innerText = "Submit Request";
-        form.onsubmit = (e) => {
-            e.preventDefault();
-            const userData = {
-                name: document.getElementById('name').value,
-                email: document.getElementById('email').value,
-                phone: document.getElementById('phone').value,
-                address: document.getElementById('address').value,
-                swapInfo: document.getElementById('swapInfo').value
-            };
-            // Save details if selected
-            if (saveDetailsCheckbox.checked) {
-                localStorage.setItem('solarhubUserDetails', JSON.stringify(userData));
-            }
-            showToastMessage("Thank you! We have received your swap request and will contact you shortly.");
-            hideCheckoutModal();
-        };
+        baseAmount = Object.values(cart).reduce((total, item) => total + (item.price * item.quantity), 0);
+        title.innerText = `Complete Your Order`;
     }
 
-    // Display subtotal
-    subtotalAmount.innerText = `₦${baseAmount.toLocaleString()}`;
-
-    // Update total amount on delivery option change
     const updateFinalAmount = () => {
         const deliveryFees = { 'free': 0, 'same-day': 4000, 'outside-lagos': 10000 };
         const selectedOption = document.querySelector('input[name="deliveryOption"]:checked').value;
         const selectedFee = deliveryFees[selectedOption];
         const total = baseAmount + selectedFee;
 
+        subtotalAmount.innerText = `₦${baseAmount.toLocaleString()}`;
         deliveryFeeAmount.innerText = `₦${selectedFee.toLocaleString()}`;
         finalAmount.innerText = `₦${total.toLocaleString()}`;
     };
@@ -403,8 +414,13 @@ const showCheckoutModal = (action, productId = null) => {
         radio.addEventListener('change', updateFinalAmount);
     });
 
-    // Initial total amount calculation on modal open
+    // Initial calculation
     updateFinalAmount();
+
+    document.getElementById('checkoutForm').onsubmit = (e) => {
+        e.preventDefault();
+        handleFlutterwavePayment(baseAmount);
+    };
 
     modal.style.display = 'flex';
 };
@@ -412,6 +428,76 @@ const showCheckoutModal = (action, productId = null) => {
 const hideCheckoutModal = () => {
     document.getElementById('checkoutModal').style.display = 'none';
 };
+
+const showPaySmallSmallModal = (productId) => {
+    const modal = document.getElementById('paySmallSmallModal');
+    const form = document.getElementById('paySmallSmallForm');
+    const savedUserDetails = JSON.parse(localStorage.getItem('solarhubUserDetails'));
+
+    if (savedUserDetails) {
+        document.getElementById('pss-name').value = savedUserDetails.name || '';
+        document.getElementById('pss-email').value = savedUserDetails.email || '';
+        document.getElementById('pss-phone').value = savedUserDetails.phone || '';
+        document.getElementById('pss-address').value = savedUserDetails.address || '';
+        document.getElementById('pss-saveDetails').checked = true;
+    } else {
+        form.reset();
+        document.getElementById('pss-saveDetails').checked = false;
+    }
+
+    form.onsubmit = (e) => {
+        e.preventDefault();
+        const userData = {
+            name: document.getElementById('pss-name').value,
+            email: document.getElementById('pss-email').value,
+            phone: document.getElementById('pss-phone').value,
+            address: document.getElementById('pss-address').value,
+        };
+        if (document.getElementById('pss-saveDetails').checked) {
+            localStorage.setItem('solarhubUserDetails', JSON.stringify(userData));
+        }
+        showToastMessage("Thank you! A representative will contact you shortly to set up your payment plan.");
+        modal.style.display = 'none';
+    };
+
+    modal.style.display = 'flex';
+};
+
+const showSwapModal = (productId) => {
+    const modal = document.getElementById('swapModal');
+    const form = document.getElementById('swapForm');
+    const savedUserDetails = JSON.parse(localStorage.getItem('solarhubUserDetails'));
+
+    if (savedUserDetails) {
+        document.getElementById('swap-name').value = savedUserDetails.name || '';
+        document.getElementById('swap-email').value = savedUserDetails.email || '';
+        document.getElementById('swap-phone').value = savedUserDetails.phone || '';
+        document.getElementById('swap-address').value = savedUserDetails.address || '';
+        document.getElementById('swap-saveDetails').checked = true;
+    } else {
+        form.reset();
+        document.getElementById('swap-saveDetails').checked = false;
+    }
+
+    form.onsubmit = (e) => {
+        e.preventDefault();
+        const userData = {
+            name: document.getElementById('swap-name').value,
+            email: document.getElementById('swap-email').value,
+            phone: document.getElementById('swap-phone').value,
+            address: document.getElementById('swap-address').value,
+            swapInfo: document.getElementById('swapInfo').value
+        };
+        if (document.getElementById('swap-saveDetails').checked) {
+            localStorage.setItem('solarhubUserDetails', JSON.stringify(userData));
+        }
+        showToastMessage("Thank you! We have received your swap request and will contact you shortly.");
+        modal.style.display = 'none';
+    };
+
+    modal.style.display = 'flex';
+};
+
 
 // --- User Actions ---
 const handleAdminLogin = (e) => {
@@ -447,11 +533,11 @@ const buyNow = (productId) => {
 };
 
 const paySmallSmall = (productId) => {
-    showCheckoutModal('paySmallSmall', productId);
+    showPaySmallSmallModal(productId);
 };
 
 const swapAvailable = (productId) => {
-    showCheckoutModal('swapAvailable', productId);
+    showSwapModal(productId);
 };
 
 const updateQuantity = (productId, change) => {
@@ -477,8 +563,21 @@ const scrollToProducts = () => {
 };
 
 // --- Payment Logic with Flutterwave ---
-const handleFlutterwavePayment = (e, productsToCheckout, baseAmount) => {
-    e.preventDefault();
+const handleFlutterwavePayment = (baseAmount) => {
+    const name = document.getElementById('name').value;
+    const email = document.getElementById('email').value;
+    const phone = document.getElementById('phone').value;
+    const address = document.getElementById('address').value;
+    const deliveryOption = document.querySelector('input[name="deliveryOption"]:checked').value;
+
+    if (document.getElementById('saveDetails').checked) {
+        const userData = { name, email, phone, address };
+        localStorage.setItem('solarhubUserDetails', JSON.stringify(userData));
+    }
+
+    const deliveryFees = { 'free': 0, 'same-day': 4000, 'outside-lagos': 10000 };
+    const deliveryFee = deliveryFees[deliveryOption];
+    const finalAmount = baseAmount + deliveryFee;
     
     // Check if the Flutterwave script is loaded
     if (typeof FlutterwaveCheckout !== 'function') {
@@ -487,27 +586,9 @@ const handleFlutterwavePayment = (e, productsToCheckout, baseAmount) => {
         return;
     }
 
-    const name = document.getElementById('name').value;
-    const email = document.getElementById('email').value;
-    const phone = document.getElementById('phone').value;
-    const address = document.getElementById('address').value;
-    const deliveryOption = document.querySelector('input[name="deliveryOption"]:checked').value;
-
-    // Save user details if checked
-    if (document.getElementById('saveDetails').checked) {
-        const userData = { name, email, phone, address };
-        localStorage.setItem('solarhubUserDetails', JSON.stringify(userData));
-    }
-
-    // Calculate final amount with delivery fee
-    const deliveryFees = { 'free': 0, 'same-day': 4000, 'outside-lagos': 10000 };
-    const deliveryFee = deliveryFees[deliveryOption];
-    const finalAmount = baseAmount + deliveryFee;
-
-    // Initiate payment
     FlutterwaveCheckout({
         public_key: "FLWPUBK-05bb86af711fd1998eb529cb0bc4e0f4-X",
-        tx_ref: "solarhub-" + Math.floor(Math.random() * 1000000), // Generate a unique transaction reference
+        tx_ref: "solarhub-" + Math.floor(Math.random() * 1000000),
         amount: finalAmount,
         currency: "NGN",
         country: "NG",
@@ -521,10 +602,8 @@ const handleFlutterwavePayment = (e, productsToCheckout, baseAmount) => {
             description: "Payment for your solar products",
         },
         callback: (response) => {
-            // This function is called after the payment is completed
             if (response.status === 'successful') {
                 showToastMessage("Payment Successful! Your order has been placed.");
-                // Clear the cart on successful payment
                 cart = {};
                 updateCartUI();
                 hideCheckoutModal();
@@ -712,7 +791,11 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('adminCloseBtn')?.addEventListener('click', hideAdminLogin);
     document.getElementById('shopNowBtn')?.addEventListener('click', scrollToProducts);
     document.getElementById('checkoutBtn')?.addEventListener('click', checkout);
-    document.getElementById('checkoutCloseBtn')?.addEventListener('click', hideCheckoutModal);
+
+    // Event listeners for closing the modals
+    document.querySelector('.checkout-close-btn')?.addEventListener('click', hideCheckoutModal);
+    document.querySelector('.pss-close-btn')?.addEventListener('click', () => document.getElementById('paySmallSmallModal').style.display = 'none');
+    document.querySelector('.swap-close-btn')?.addEventListener('click', () => document.getElementById('swapModal').style.display = 'none');
 
     // Event delegation for product card buttons
     const productsGrid = document.getElementById('productsGrid');
