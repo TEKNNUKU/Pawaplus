@@ -1,213 +1,1117 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pawa+9ja - Your Home for Solar Energy</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Nigeria's #1 Solar Power Marketplace - Complete solar systems, power banks, inverters, and more. Buy now or pay small-small with flexible payment plans!" />
+  <title>Pawa+9ja Nigeria | Power Your Life with Solar Energy</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+
+  <style>
+    :root {
+      --primary-orange: #FF6B35;
+      --primary-yellow: #F7931E;
+      --success-green: #28a745;
+      --urgent-red: #dc3545;
+      --trust-blue: #007bff;
+      --text-dark: #2c3e50;
+      --text-light: #6c757d;
+      --bg-light: #f8f9fa;
+      --white: #ffffff;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: var(--white);
+      color: var(--text-dark);
+      line-height: 1.6;
+      overflow-x: hidden; /* This is the key fix for horizontal overflow */
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1rem;
+    }
+
+    .btn {
+      border: none;
+      border-radius: 8px;
+      padding: 0.8rem 1.2rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      text-decoration: none;
+      text-align: center;
+      font-size: 0.9rem;
+    }
+
+    .btn-primary {
+      background: var(--primary-orange);
+      color: var(--white);
+    }
+
+    .btn-primary:hover {
+      background: #e55a2e;
+      transform: translateY(-2px);
+    }
+
+    .btn-secondary {
+      background: var(--white);
+      color: var(--primary-orange);
+      border: 2px solid var(--primary-orange);
+    }
+
+    .btn-secondary:hover {
+      background: var(--primary-orange);
+      color: var(--white);
+    }
+
+    .close-btn {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: var(--text-light);
+    }
+
+    .section-title {
+      text-align: center;
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--text-dark);
+      margin-bottom: 3rem;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 2rem;
+    }
+
+    .spinner {
+      border: 4px solid var(--bg-light);
+      border-top: 4px solid var(--primary-orange);
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 1rem;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .header {
+      background: linear-gradient(135deg, var(--primary-orange), var(--primary-yellow));
+      padding: 1rem 0;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    .nav-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      color: var(--white);
+      font-size: 1.8rem;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .nav-links {
+      display: flex;
+      list-style: none;
+      gap: 2rem;
+    }
+
+    .nav-links a {
+      color: var(--white);
+      text-decoration: none;
+      font-weight: 500;
+      transition: opacity 0.3s;
+    }
+
+    .nav-links a:hover {
+      opacity: 0.8;
+    }
+
+    .menu-icon {
+      display: none;
+      color: var(--white);
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+
+    .cart-icon {
+      position: relative;
+      color: var(--white);
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+
+    .cart-count {
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      background: var(--urgent-red);
+      color: var(--white);
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      font-size: 0.8rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1;
+    }
+
+    .hero {
+      background: linear-gradient(rgba(255,107,53,0.9), rgba(247,147,30,0.9));
+      color: var(--white);
+      padding: 4rem 0;
+      text-align: center;
+    }
+
+    .hero h1 {
+      font-size: 3rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      animation: fadeInUp 1s ease-out;
+    }
+
+    .hero p {
+      font-size: 1.2rem;
+      margin-bottom: 2rem;
+      opacity: 0.95;
+    }
+
+    .social-proof {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin: 2rem 0;
+      flex-wrap: wrap;
+    }
+
+    .proof-item {
+      text-align: center;
+    }
+
+    .proof-number {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--white);
+    }
+
+    .proof-text {
+      font-size: 0.9rem;
+      color: var(--white);
+      opacity: 0.9;
+    }
+
+    .urgency-banner {
+      background: var(--urgent-red);
+      color: var(--white);
+      text-align: center;
+      padding: 0.8rem;
+      font-weight: 600;
+      animation: pulse 2s infinite;
+    }
+
+    .countdown {
+      font-weight: 700;
+      font-size: 1.1rem;
+    }
+
+    @keyframes pulse {
+      0% { opacity: 1; }
+      50% { opacity: 0.8; }
+      100% { opacity: 1; }
+    }
+
+    .categories {
+      padding: 4rem 0;
+      background: var(--bg-light);
+    }
+
+    .categories-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+    }
+
+    .category-card {
+      background: var(--white);
+      border-radius: 15px;
+      padding: 2rem;
+      text-align: center;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+      transition: transform 0.3s, box-shadow 0.3s;
+      cursor: pointer;
+    }
+
+    .category-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+    }
+
+    .category-icon {
+      font-size: 3rem;
+      color: var(--primary-orange);
+      margin-bottom: 1rem;
+    }
+
+    .category-title {
+      font-size: 1.3rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
+    .featured-products {
+      padding: 4rem 0;
+    }
+
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    .product-card {
+      background: var(--white);
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+      transition: transform 0.3s, box-shadow 0.3s;
+      position: relative;
+    }
+
+    .product-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+    }
+
+    .product-badge {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: var(--urgent-red);
+      color: var(--white);
+      padding: 0.3rem 0.8rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      z-index: 2;
+    }
+
+    .product-image {
+      width: 100%;
+      height: 200px;
+      background: linear-gradient(45deg, var(--primary-orange), var(--primary-yellow));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 4rem;
+      color: var(--white);
+    }
+
+    .product-info {
+      padding: 1.5rem;
+    }
+
+    .product-title {
+      font-size: 1.3rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
+    .product-rating {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .stars {
+      color: var(--primary-yellow);
+    }
+
+    .rating-count {
+      color: var(--text-light);
+      font-size: 0.9rem;
+    }
+
+    .product-price {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .current-price {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--primary-orange);
+    }
+
+    .original-price {
+      font-size: 1.1rem;
+      color: var(--text-light);
+      text-decoration: line-through;
+    }
+
+    .payment-options {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .payment-badge {
+      background: var(--success-green);
+      color: var(--white);
+      padding: 0.2rem 0.6rem;
+      border-radius: 12px;
+      font-size: 0.7rem;
+      font-weight: 500;
+    }
+
+    .product-actions {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .search-filter {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .search-filter input, .search-filter select {
+      padding: 0.8rem;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-family: 'Poppins', sans-serif;
+      flex: 1;
+      min-width: 150px;
+    }
+
+    .testimonials {
+      padding: 4rem 0;
+      background: var(--bg-light);
+    }
+
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+    }
+
+    .testimonial-card {
+      background: var(--white);
+      border-radius: 15px;
+      padding: 2rem;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+      position: relative;
+    }
+
+    .testimonial-quote {
+      font-size: 3rem;
+      color: var(--primary-orange);
+      position: absolute;
+      top: -10px;
+      left: 20px;
+    }
+
+    .testimonial-text {
+      margin: 1rem 0;
+      font-style: italic;
+      color: var(--text-dark);
+    }
+
+    .testimonial-author {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .author-avatar {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: var(--primary-orange);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--white);
+      font-weight: 600;
+    }
+
+    .author-info {
+      flex: 1;
+    }
+
+    .author-name {
+      font-weight: 600;
+      color: var(--text-dark);
+    }
+
+    .author-location {
+      color: var(--text-light);
+      font-size: 0.9rem;
+    }
+
+    .trust-section {
+      padding: 4rem 0;
+      background: var(--trust-blue);
+      color: var(--white);
+      text-align: center;
+    }
+
+    .trust-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    .trust-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .trust-icon {
+      font-size: 3rem;
+      color: var(--primary-yellow);
+    }
+
+    .footer {
+      background: var(--text-dark);
+      color: var(--white);
+      padding: 4rem 0 2rem;
+      font-size: 0.9rem;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2rem;
+    }
+
+    .footer-column h3 {
+      font-size: 1.2rem;
+      margin-bottom: 1rem;
+      color: var(--primary-orange);
+    }
+
+    .footer-column ul {
+      list-style: none;
+    }
+
+    .footer-column li {
+      margin-bottom: 0.5rem;
+    }
+
+    .footer-column a {
+      color: var(--bg-light);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    .footer-column a:hover {
+      color: var(--primary-orange);
+    }
+
+    .slogan {
+      margin-top: 0.5rem;
+      font-style: italic;
+      color: var(--text-light);
+    }
+
+    .social-icons a {
+      color: var(--white);
+      font-size: 1.2rem;
+      margin-right: 1rem;
+      transition: color 0.3s;
+    }
+
+    .social-icons a:hover {
+      color: var(--primary-orange);
+    }
+
+    .footer-bottom {
+      text-align: center;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      margin-top: 2rem;
+      padding-top: 1rem;
+      color: var(--text-light);
+    }
+
+    .cart-sidebar {
+      position: fixed;
+      top: 0;
+      right: -100%;
+      width: 100%;
+      max-width: 400px;
+      height: 100vh;
+      background: var(--white);
+      box-shadow: -5px 0 20px rgba(0,0,0,0.1);
+      transition: right 0.3s;
+      z-index: 2000;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .cart-sidebar.open {
+      right: 0;
+    }
+
+    .cart-header {
+      padding: 1.5rem;
+      border-bottom: 1px solid #eee;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .cart-title {
+      font-size: 1.3rem;
+      font-weight: 600;
+    }
+
+    .cart-content {
+      flex-grow: 1;
+      padding: 1rem;
+    }
+
+    .cart-item {
+      display: flex;
+      gap: 1rem;
+      padding: 1rem;
+      border-bottom: 1px solid #eee;
+    }
+
+    .cart-item-image {
+      width: 60px;
+      height: 60px;
+      background: var(--primary-orange);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--white);
+    }
+
+    .cart-item-info {
+      flex: 1;
+    }
+
+    .cart-item-title {
+      font-weight: 500;
+      margin-bottom: 0.5rem;
+    }
+
+    .cart-item-price {
+      color: var(--primary-orange);
+      font-weight: 600;
+    }
+
+    .quantity-controls {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 0.5rem;
+    }
+
+    .qty-btn {
+      background: var(--primary-orange);
+      color: var(--white);
+      border: none;
+      width: 25px;
+      height: 25px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .cart-total {
+      padding: 1.5rem;
+      border-top: 1px solid #eee;
+    }
+
+    .total-amount {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--primary-orange);
+      margin-bottom: 1rem;
+    }
+
+    .product-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.8);
+      z-index: 2500;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .product-modal-content {
+      background: var(--white);
+      border-radius: 15px;
+      padding: 2rem;
+      width: 90%;
+      max-width: 800px;
+      max-height: 90vh;
+      overflow-y: auto;
+      position: relative;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+    }
+
+    .product-modal-image {
+      width: 100%;
+      height: 300px;
+      background: var(--bg-light);
+      border-radius: 10px;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .product-modal-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .product-modal-info {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .admin-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.8);
+      z-index: 3000;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .admin-modal-content {
+      background: var(--white);
+      border-radius: 15px;
+      padding: 2rem;
+      width: 90%;
+      max-width: 400px;
+      text-align: center;
+    }
+
+    .admin-modal-content h2 {
+      margin-bottom: 1.5rem;
+    }
+
+    .admin-modal-content input {
+      width: 100%;
+      padding: 0.8rem;
+      margin-bottom: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+    }
+
+    /* --- Mobile Optimization --- */
+    @media (max-width: 768px) {
+      .header {
+        padding: 0.8rem 1rem;
+      }
+
+      .nav-links {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 60px;
+        left: 0;
+        width: 100%;
+        background: var(--primary-orange);
+        box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+        padding: 1rem 0;
+        z-index: 999;
+      }
+
+      .nav-links.active {
+        display: flex;
+      }
+
+      .nav-links li {
+        text-align: center;
+        width: 100%;
+      }
+
+      .nav-links a {
+        display: block;
+        padding: 0.8rem;
+      }
+
+      .menu-icon {
+        display: block;
+      }
+
+      .nav-container {
+        padding: 0 1rem;
+      }
+
+      .cart-icon {
+        position: relative;
+      }
+
+      .cart-count {
+        top: -4px;
+        right: -4px;
+        font-size: 0.7rem;
+        width: 18px;
+        height: 18px;
+      }
+
+      .hero h1 {
+        font-size: 2.2rem;
+      }
+
+      .social-proof {
+        gap: 1rem;
+      }
+
+      .proof-number, .proof-text {
+        color: var(--white);
+      }
+
+      .section-title {
+        font-size: 2rem;
+      }
+
+      .products-grid, .categories-grid, .testimonials-grid, .trust-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .product-modal-content {
+        grid-template-columns: 1fr;
+        padding: 1.5rem;
+        max-height: 95vh;
+      }
+
+      .product-modal-image {
+        height: 250px;
+      }
+    }
+  </style>
 </head>
 <body>
-
   <header class="header">
-    <div class="logo">
-      <a href="index.html">
-        <img src="https://pink-quiet-wolf-922.mypinata.cloud/ipfs/bafybeicgqfjj23iipqqlr332j6r4m56z53wkw335a7r7n6y67f33m52f4a" alt="Pawa+9ja Logo">
-      </a>
-    </div>
-    <nav class="nav-links" id="navLinks">
-      <a href="index.html">Home</a>
-      <a href="about.html">About</a>
-      <a href="index.html#products">Products</a>
-      <a href="contact.html">Contact</a>
-      <a href="#" id="adminLink">Admin</a>
-    </nav>
-    <div class="nav-icons">
+    <div class="nav-container">
+      <a href="index.html" class="logo">⚡ Pawa+9ja</a>
+      <div class="menu-icon" id="menuIcon">
+        <i class="fas fa-bars"></i>
+      </div>
+      <nav>
+        <ul class="nav-links" id="navLinks">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="index.html#products">Products</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="#contact">Contact</a></li>
+          <li><a href="#" id="adminLink">Admin</a></li>
+        </ul>
+      </nav>
       <div class="cart-icon" id="cartIcon">
         <i class="fas fa-shopping-cart"></i>
         <span class="cart-count" id="cartCount">0</span>
       </div>
-      <div class="menu-icon" id="menuIcon">
-        <i class="fas fa-bars"></i>
-      </div>
     </div>
   </header>
 
-  <div class="top-banner">
-    <div class="banner-content">
-      <span class="fire-icon">🔥</span> LIMITED TIME: Free Installation + 2-Year Warranty | Only <span id="countdown">48:00:00</span> Left!
-    </div>
+  <div class="urgency-banner">
+    🔥 LIMITED TIME: Free Installation + 2-Year Warranty | Only <span class="countdown" id="countdown">48:00:00</span> Left!
   </div>
 
-  <main>
-    <section class="hero-section">
-      <div class="hero-overlay"></div>
-      <div class="hero-content animate__animated animate__fadeInUp">
-        <h1>Power Your Life with Solar Energy</h1>
-        <p>Nigeria's most trusted solar marketplace. Complete systems, power banks, inverters & more. Buy now or pay small-small!</p>
-        <div class="stats-grid">
-          <div class="stat-item">
-            <span class="stat-number">5,000+</span>
-            <span class="stat-text">Happy Customers</span>
-          </div>
-          <div class="stat-item">
-            <span class="stat-number">500+</span>
-            <span class="stat-text">Installations This Month</span>
-          </div>
-          <div class="stat-item">
-            <span class="stat-number">98%</span>
-            <span class="stat-text">Customer Satisfaction</span>
-          </div>
-          <div class="stat-item">
-            <span class="stat-number">24/7</span>
-            <span class="stat-text">Support Available</span>
-          </div>
+  <section class="hero" id="home">
+    <div class="hero-content">
+      <h1>Power Your Life with Solar Energy</h1>
+      <p>Nigeria's most trusted solar marketplace. Complete systems, power banks, inverters & more. Buy now or pay small-small!</p>
+      <div class="social-proof">
+        <div class="proof-item">
+          <div class="proof-number">5,000+</div>
+          <div class="proof-text">Happy Customers</div>
         </div>
-        <button id="shopNowBtn" class="btn btn-primary animate__animated animate__pulse animate__infinite">
-          <i class="fas fa-bolt"></i> Shop Solar Products Now
-        </button>
+        <div class="proof-item">
+          <div class="proof-number">500+</div>
+          <div class="proof-text">Installations This Month</div>
+        </div>
+        <div class="proof-item">
+          <div class="proof-number">98%</div>
+          <div class="proof-text">Customer Satisfaction</div>
+        </div>
+        <div class="proof-item">
+          <div class="proof-number">24/7</div>
+          <div class="proof-text">Support Available</div>
+        </div>
       </div>
-    </section>
+      <button class="btn btn-primary" id="shopNowBtn">
+        <i class="fas fa-bolt"></i> Shop Solar Products Now
+      </button>
+    </div>
+  </section>
 
-    <section class="categories-section">
-      <div class="container">
-        <h2>Shop by Category</h2>
-        <div class="category-grid">
-          <a href="complete-systems.html" class="category-card" data-category="complete-systems">
-            <div class="category-icon-container"><i class="fas fa-solar-panel"></i></div>
-            <h4>Complete Solar Systems</h4>
-            <p>1kVA - 10kVA systems for homes & businesses</p>
-          </a>
-          <a href="power-banks.html" class="category-card" data-category="power-banks">
-            <div class="category-icon-container"><i class="fas fa-battery-full"></i></div>
-            <h4>Solar Power Banks</h4>
-            <p>Portable power solutions for phones & gadgets</p>
-          </a>
-          <a href="inverters.html" class="category-card" data-category="inverters">
-            <div class="category-icon-container"><i class="fas fa-plug"></i></div>
-            <h4>Inverters & Controllers</h4>
-            <p>High-quality power conversion systems</p>
-          </a>
-          <a href="accessories.html" class="category-card" data-category="accessories">
-            <div class="category-icon-container"><i class="fas fa-toolbox"></i></div>
-            <h4>Solar Accessories</h4>
-            <p>Cables, mounting systems, and more</p>
-          </a>
-        </div>
+  <section class="categories" id="categories">
+    <div class="container">
+      <h2 class="section-title">Shop by Category</h2>
+      <div class="categories-grid">
+        <a href="complete-systems.html" class="category-card" data-category="complete-systems">
+          <div class="category-icon"><i class="fas fa-solar-panel"></i></div>
+          <h3 class="category-title">Complete Solar Systems</h3>
+          <p>1kVA - 10kVA systems for homes & businesses</p>
+        </a>
+        <a href="power-banks.html" class="category-card" data-category="power-banks">
+          <div class="category-icon"><i class="fas fa-battery-full"></i></div>
+          <h3 class="category-title">Solar Power Banks</h3>
+          <p>Portable power solutions for phones & gadgets</p>
+        </a>
+        <a href="inverters.html" class="category-card" data-category="inverters">
+          <div class="category-icon"><i class="fas fa-plug"></i></div>
+          <h3 class="category-title">Inverters & Controllers</h3>
+          <p>High-quality power conversion systems</p>
+        </a>
+        <a href="accessories.html" class="category-card" data-category="accessories">
+          <div class="category-icon"><i class="fas fa-tools"></i></div>
+          <h3 class="category-title">Solar Accessories</h3>
+          <p>Cables, mounting systems, and more</p>
+        </a>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <section class="products-section" id="products">
-      <div class="container">
-        <h2>Our Products</h2>
-        <div class="filter-controls">
-          <input type="text" id="searchInput" placeholder="Search for products...">
-          <select id="categoryFilter">
-            <option value="all">All Categories</option>
-            <option value="complete-systems">Complete Solar Systems</option>
-            <option value="inverters">Inverters & Controllers</option>
-            <option value="power-banks">Solar Power Banks</option>
-            <option value="accessories">Solar Accessories</option>
-          </select>
-          <select id="priceFilter">
-            <option value="all">All Prices</option>
-            <option value="low">₦0 - ₦500k</option>
-            <option value="medium">₦500k - ₦1M</option>
-            <option value="high">₦1M+</option>
-          </select>
-        </div>
-        <div class="products-grid" id="productsGrid">
-          </div>
+  <section class="featured-products" id="products">
+    <div class="container">
+      <h2 class="section-title">🔥 Hot Deals - Limited Stock!</h2>
+      <div class="search-filter">
+        <input type="text" id="searchInput" placeholder="Search products...">
+        <select id="categoryFilter">
+          <option value="all">All Categories</option>
+          <option value="complete-systems">Complete Solar Systems</option>
+          <option value="inverters">Inverters & Controllers</option>
+          <option value="power-banks">Solar Power Banks</option>
+          <option value="accessories">Solar Accessories</option>
+        </select>
+        <select id="priceFilter">
+          <option value="all">All Prices</option>
+          <option value="low">₦0 - ₦500,000</option>
+          <option value="medium">₦500,001 - ₦1,000,000</option>
+          <option value="high">₦1,000,001+</option>
+        </select>
       </div>
-    </section>
-  </main>
+      <div class="loading" id="loadingProducts" style="display: none;">
+        <div class="spinner"></div>
+        <p>Loading amazing deals...</p>
+      </div>
+      <div class="products-grid" id="productsGrid"></div>
+    </div>
+  </section>
+
+  <section class="testimonials">
+    <div class="container">
+      <h2 class="section-title">What Our Customers Say</h2>
+      <div class="testimonials-grid">
+        <div class="testimonial-card">
+          <div class="testimonial-quote">"</div>
+          <p class="testimonial-text">Pawa+9ja saved my business! No more generator wahala. My shop runs 24/7 now and customers are so happy. The pay-small-small plan made it possible for me.</p>
+          <div class="testimonial-author">
+            <div class="author-avatar">A.O.</div>
+            <div class="author-info">
+              <div class="author-name">Ahmed Olaleye</div>
+              <div class="author-location">Lagos, Nigeria</div>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <div class="testimonial-quote">"</div>
+          <p class="testimonial-text">The installation was so quick and professional. The team was friendly and answered all my questions. I'm telling everyone I know about this company!</p>
+          <div class="testimonial-author">
+            <div class="author-avatar">C.E.</div>
+            <div class="author-info">
+              <div class="author-name">Chisom Ekwueme</div>
+              <div class="author-location">Abuja, Nigeria</div>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <div class="testimonial-quote">"</div>
+          <p class="testimonial-text">I bought a solar power bank for my office. It’s perfect for keeping my laptop charged during the day. The product quality is top-notch. Highly recommended!</p>
+          <div class="testimonial-author">
+            <div class="author-avatar">D.K.</div>
+            <div class="author-info">
+              <div class="author-name">David Kehinde</div>
+              <div class="author-location">Ogun, Nigeria</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="trust-section">
+    <div class="container">
+      <h2 class="section-title">Why Trust Pawa+9ja?</h2>
+      <div class="trust-grid">
+        <div class="trust-item">
+          <div class="trust-icon"><i class="fas fa-shield-alt"></i></div>
+          <h3 class="trust-title">Secure Payments</h3>
+          <p>Our payment gateway ensures your transactions are safe and secure.</p>
+        </div>
+        <div class="trust-item">
+          <div class="trust-icon"><i class="fas fa-truck-fast"></i></div>
+          <h3 class="trust-title">Fast Delivery</h3>
+          <p>We deliver solar products to your doorstep anywhere in Nigeria.</p>
+        </div>
+        <div class="trust-item">
+          <div class="trust-icon"><i class="fas fa-handshake"></i></div>
+          <h3 class="trust-title">Flexible Plans</h3>
+          <p>Choose from "Pay Small-Small" or other flexible payment options.</p>
+        </div>
+        <div class="trust-item">
+          <div class="trust-icon"><i class="fas fa-award"></i></div>
+          <h3 class="trust-title">Quality Guarantee</h3>
+          <p>All products come with a minimum 2-year warranty for peace of mind.</p>
+        </div>
+      </div>
+    </div>
+  </section>
 
   <footer class="footer">
-    <div class="footer-section contact-info">
-      <h4>Contact Us</h4>
-      <p><i class="fas fa-envelope"></i> info@pawa9ja.com</p>
-      <p><i class="fas fa-phone"></i> +234 800 123 4567</p>
-      <p><i class="fas fa-map-marker-alt"></i> 123 Solar Way, Lagos, Nigeria</p>
-    </div>
-    <div class="footer-section social-links">
-      <h4>Follow Us</h4>
-      <div class="social-icons">
-        <a href="#"><i class="fab fa-facebook-f"></i></a>
-        <a href="#"><i class="fab fa-twitter"></i></a>
-        <a href="#"><i class="fab fa-instagram"></i></a>
-        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-column">
+          <a href="index.html" class="logo">⚡ Pawa+9ja</a>
+          <p class="slogan">Powering Nigeria, one home at a time.</p>
+        </div>
+        <div class="footer-column">
+          <h3>Quick Links</h3>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="index.html#products">Shop</a></li>
+            <li><a href="about.html">About Us</a></li>
+            <li><a href="#contact">Contact</a></li>
+          </ul>
+        </div>
+        <div class="footer-column">
+          <h3>Follow Us</h3>
+          <div class="social-icons">
+            <a href="#"><i class="fab fa-facebook-f"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+          </div>
+        </div>
+        <div class="footer-column">
+          <h3>Contact</h3>
+          <p><i class="fas fa-map-marker-alt"></i> 123 Solar Street, Lagos, Nigeria</p>
+          <p><i class="fas fa-phone"></i> +234 800 123 4567</p>
+          <p><i class="fas fa-envelope"></i> support@pawa9ja.ng</p>
+        </div>
       </div>
-    </div>
-    <div class="footer-section quick-links">
-      <h4>Quick Links</h4>
-      <ul>
-        <li><a href="index.html">Home</a></li>
-        <li><a href="about.html">About Us</a></li>
-        <li><a href="contact.html">Contact</a></li>
-        <li><a href="#">FAQ</a></li>
-      </ul>
+      <div class="footer-bottom">
+        <p>&copy; 2024 Pawa+9ja. All Rights Reserved.</p>
+      </div>
     </div>
   </footer>
 
-  <div id="adminModal" class="modal">
-    <div class="modal-content">
-      <span class="modal-close-btn" id="adminCloseBtn">&times;</span>
+  <div class="cart-sidebar" id="cartSidebar">
+    <div class="cart-header">
+      <h3 class="cart-title">Your Cart</h3>
+      <button class="close-btn" id="cartCloseBtn">&times;</button>
+    </div>
+    <div class="cart-content" id="cartItems">
+      <p style="text-align: center;">Your cart is empty.</p>
+    </div>
+    <div class="cart-total">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <span style="font-weight: 600;">Total:</span>
+        <span class="total-amount" id="totalAmount">₦0</span>
+      </div>
+      <button class="btn btn-primary" style="width: 100%; margin-top: 1rem;" id="checkoutBtn">Checkout</button>
+    </div>
+  </div>
+
+  <div class="product-modal" id="productModal">
+    <div class="product-modal-content">
+      <button class="close-btn" id="modalCloseBtn" style="position: absolute; top: 1rem; right: 1rem;">&times;</button>
+      <div class="product-modal-image">
+        <img id="modalImage" src="" alt="Product Image">
+      </div>
+      <div class="product-modal-info">
+        <h2 id="modalTitle"></h2>
+        <div class="product-rating">
+          <span class="stars">★★★★★</span>
+          <span class="rating-count" id="modalRating"></span>
+        </div>
+        <p id="modalDescription"></p>
+        <div class="product-price">
+          <span class="current-price" id="modalPrice"></span>
+          <span class="original-price" id="modalOriginalPrice"></span>
+        </div>
+        <button class="btn btn-primary" id="modalAddToCartBtn" style="width: 100%; margin-top: auto;">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="admin-modal" id="adminModal">
+    <div class="admin-modal-content">
+      <button class="close-btn" id="adminCloseBtn" style="position: absolute; top: 1rem; right: 1rem;">&times;</button>
       <h2>Admin Login</h2>
       <form id="adminLoginForm">
-        <div class="form-group">
-          <label for="adminPassword">Password:</label>
-          <input type="password" id="adminPassword" required>
-        </div>
+        <input type="email" id="adminEmail" placeholder="Enter Admin Email" required>
+        <input type="password" id="adminPassword" placeholder="Enter Admin Password" required>
         <button type="submit" class="btn btn-primary">Login</button>
       </form>
     </div>
   </div>
 
-  <div id="productModal" class="modal">
-    <div class="modal-content product-modal-content">
-      <span class="modal-close-btn" id="modalCloseBtn">&times;</span>
-      <div class="modal-product-details">
-        <div class="modal-image-container">
-          <img id="modalImage" src="" alt="Product Image">
-        </div>
-        <div class="modal-info">
-          <h2 id="modalTitle"></h2>
-          <p id="modalDescription"></p>
-          <div class="modal-rating">
-            <span class="stars">★★★★★</span>
-            <span id="modalRating"></span>
-          </div>
-          <div class="modal-price">
-            <span id="modalPrice" class="current-price"></span>
-            <span id="modalOriginalPrice" class="original-price"></span>
-          </div>
-          <button id="modalAddToCartBtn" class="btn btn-primary">
-            <i class="fas fa-shopping-cart"></i> Add to Cart
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div id="cartSidebar" class="cart-sidebar">
-    <div class="cart-header">
-      <h3>Shopping Cart</h3>
-      <button class="cart-close-btn" id="cartCloseBtn">&times;</button>
-    </div>
-    <div class="cart-items" id="cartItems">
-      </div>
-    <div class="cart-summary">
-      <div class="cart-total">
-        <span>Total:</span>
-        <span id="totalAmount">₦0</span>
-      </div>
-      <button class="btn btn-checkout" id="checkoutBtn">Checkout</button>
-    </div>
-  </div>
-
-  <script type="module" src="pawa.js"></script>
-
+  <script src="pawa.js"></script>
 </body>
 </html>
