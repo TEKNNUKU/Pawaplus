@@ -26,51 +26,217 @@ const showToastMessage = (message) => {
     }, 3000);
 };
 
-// HTML for the new checkout/contact modal
+// HTML for the new, redesigned checkout/contact modal
 const checkoutModalHTML = `
+<style>
+/* Basic Modal Styles */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+.modal-content {
+    background: #fff;
+    padding: 2rem;
+    border-radius: 10px;
+    position: relative;
+    width: 90%;
+    max-width: 500px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    overflow-y: auto;
+    max-height: 90vh;
+    font-family: 'Inter', sans-serif;
+}
+.close-btn {
+    position: absolute;
+    top: 15px;
+    right: 25px;
+    font-size: 2rem;
+    cursor: pointer;
+    color: #333;
+}
+.modal-title {
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: #333;
+}
+.form-group {
+    margin-bottom: 1rem;
+}
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+}
+.form-group input, .form-group textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-sizing: border-box;
+}
+.delivery-options-group {
+    margin-bottom: 1.5rem;
+}
+.delivery-option {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.75rem;
+    padding: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+.delivery-option:hover {
+    background-color: #f5f5f5;
+}
+.delivery-option input[type="radio"] {
+    margin-right: 1rem;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #ccc;
+    border-radius: 50%;
+    outline: none;
+    transition: border-color 0.3s;
+    cursor: pointer;
+}
+.delivery-option input[type="radio"]:checked {
+    border-color: #f7931a;
+    background-color: #f7931a;
+}
+.delivery-option input[type="radio"]:checked::after {
+    content: '';
+    display: block;
+    width: 10px;
+    height: 10px;
+    margin: 3px;
+    background-color: #fff;
+    border-radius: 50%;
+}
+.delivery-option-text {
+    flex-grow: 1;
+}
+.summary-line {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem 0;
+    border-top: 1px solid #eee;
+    font-weight: 500;
+}
+.summary-line.total {
+    font-weight: 700;
+    font-size: 1.25rem;
+    color: #f7931a;
+    margin-top: 1rem;
+}
+.summary-line span:last-child {
+    font-weight: 700;
+}
+.btn-proceed {
+    width: 100%;
+    padding: 1rem;
+    background-color: #f7931a;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+.btn-proceed:hover {
+    background-color: #e5820a;
+}
+.save-details-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+</style>
   <div id="checkoutModal" class="modal-overlay" style="display: none;">
     <div class="modal-content">
       <span class="close-btn" id="checkoutCloseBtn">&times;</span>
-      <h3 id="checkoutTitle">Checkout</h3>
-      <p id="checkoutDescription"></p>
+      <h3 class="modal-title" id="checkoutTitle">Complete Your Order</h3>
       <form id="checkoutForm">
         <div class="form-group">
-          <label for="name">Full Name:</label>
+          <label for="name">Full Name</label>
           <input type="text" id="name" name="name" required>
         </div>
         <div class="form-group">
-          <label for="email">Email:</label>
+          <label for="email">Email</label>
           <input type="email" id="email" name="email" required>
         </div>
         <div class="form-group">
-          <label for="phone">Phone Number:</label>
+          <label for="phone">Phone Number</label>
           <input type="tel" id="phone" name="phone" required>
         </div>
         <div class="form-group">
-          <label for="address">Delivery Address:</label>
+          <label for="address">Delivery Address</label>
           <textarea id="address" name="address" required></textarea>
         </div>
         <div class="form-group" id="swapInfoGroup" style="display:none;">
-          <label for="swapInfo">Further Information for Swap:</label>
-          <textarea id="swapInfo" name="swapInfo" placeholder="e.g., condition of your old device, preferred pick-up time, etc."></textarea>
+          <label for="swapInfo">Additional Info (e.g., for Swap requests)</label>
+          <textarea id="swapInfo" name="swapInfo" placeholder="Please provide details about the item you want to swap, its condition, etc."></textarea>
         </div>
-        <div class="form-group">
-          <label for="deliveryOption">Delivery Option:</label>
-          <select id="deliveryOption" name="deliveryOption">
-            <option value="free">Free Delivery (Lagos Only, up to 48hrs) - ₦0</option>
-            <option value="same-day">Same Day Delivery (Lagos Only) - ₦4,000</option>
-            <option value="outside-lagos">Delivery Outside Lagos - ₦10,000</option>
-          </select>
+        
+        <div class="delivery-options-group">
+          <label>Select Delivery Option</label>
+          <div class="delivery-option">
+            <input type="radio" id="delivery-free" name="deliveryOption" value="free" checked>
+            <div class="delivery-option-text">
+              <strong>Free Delivery</strong> (Lagos Only, up to 48hrs)
+              <span>₦0</span>
+            </div>
+          </div>
+          <div class="delivery-option">
+            <input type="radio" id="delivery-same-day" name="deliveryOption" value="same-day">
+            <div class="delivery-option-text">
+              <strong>Same Day Delivery</strong> (Lagos Only)
+              <span>₦4,000</span>
+            </div>
+          </div>
+          <div class="delivery-option">
+            <input type="radio" id="delivery-outside" name="deliveryOption" value="outside-lagos">
+            <div class="delivery-option-text">
+              <strong>Delivery Outside Lagos</strong>
+              <span>₦10,000</span>
+            </div>
+          </div>
         </div>
-        <div class="form-group">
-          <input type="checkbox" id="saveDetails" name="saveDetails">
-          <label for="saveDetails">Save my details for future use</label>
+
+        <div class="summary-line">
+          <span>Subtotal:</span>
+          <span id="subtotalAmount">₦0</span>
         </div>
-        <div class="form-group total-display">
+        <div class="summary-line">
+          <span>Delivery Fee:</span>
+          <span id="deliveryFeeAmount">₦0</span>
+        </div>
+        <div class="summary-line total">
           <span>Total:</span>
           <span id="finalAmount">₦0</span>
         </div>
-        <button type="submit" class="btn btn-primary" id="placeOrderBtn">Make Payment</button>
+        
+        <div class="save-details-checkbox">
+          <input type="checkbox" id="saveDetails" name="saveDetails">
+          <label for="saveDetails">Save my details for future purchases</label>
+        </div>
+        
+        <button type="submit" class="btn-proceed" id="placeOrderBtn">Proceed to Payment</button>
       </form>
     </div>
   </div>
@@ -134,10 +300,13 @@ const hideProductModal = () => {
 const showCheckoutModal = (action, productId = null) => {
     const modal = document.getElementById('checkoutModal');
     const title = document.getElementById('checkoutTitle');
-    const description = document.getElementById('checkoutDescription');
     const swapInfoGroup = document.getElementById('swapInfoGroup');
     const form = document.getElementById('checkoutForm');
+    const subtotalAmount = document.getElementById('subtotalAmount');
+    const deliveryFeeAmount = document.getElementById('deliveryFeeAmount');
     const finalAmount = document.getElementById('finalAmount');
+    const saveDetailsCheckbox = document.getElementById('saveDetails');
+    const deliveryOptionRadios = document.querySelectorAll('input[name="deliveryOption"]');
 
     // Load saved user details if available
     const savedUserDetails = JSON.parse(localStorage.getItem('solarhubUserDetails'));
@@ -146,32 +315,37 @@ const showCheckoutModal = (action, productId = null) => {
         document.getElementById('email').value = savedUserDetails.email || '';
         document.getElementById('phone').value = savedUserDetails.phone || '';
         document.getElementById('address').value = savedUserDetails.address || '';
+        saveDetailsCheckbox.checked = true;
+    } else {
+        saveDetailsCheckbox.checked = false;
     }
 
-    // Update modal content based on the action
+    // Reset form and UI
+    form.reset();
     swapInfoGroup.style.display = 'none';
-    form.onsubmit = null;
+    subtotalAmount.innerText = '₦0';
+    deliveryFeeAmount.innerText = '₦0';
+    finalAmount.innerText = '₦0';
+
     let productsToCheckout = [];
     let baseAmount = 0;
 
     if (action === 'buyNow' && productId) {
         const product = products.find(p => p.id === productId);
         title.innerText = `Buy Now: ${product.name}`;
-        description.innerText = "Please provide your details to complete your order.";
         productsToCheckout.push(product);
         baseAmount = product.price;
         form.onsubmit = (e) => handleFlutterwavePayment(e, productsToCheckout, baseAmount);
     } else if (action === 'checkout') {
-        title.innerText = "Checkout";
-        description.innerText = "Please provide your details to complete your cart's order.";
+        title.innerText = "Complete Your Order";
         productsToCheckout = Object.values(cart);
         baseAmount = productsToCheckout.reduce((total, item) => total + (item.price * item.quantity), 0);
         form.onsubmit = (e) => handleFlutterwavePayment(e, productsToCheckout, baseAmount);
     } else if (action === 'paySmallSmall' && productId) {
         const product = products.find(p => p.id === productId);
         title.innerText = `Pay Small-Small: ${product.name}`;
-        description.innerText = "Provide your details to initiate a payment plan. You will be contacted shortly.";
         baseAmount = product.price;
+        document.getElementById('placeOrderBtn').innerText = "Submit Request";
         form.onsubmit = (e) => {
             e.preventDefault();
             const userData = {
@@ -181,7 +355,7 @@ const showCheckoutModal = (action, productId = null) => {
                 address: document.getElementById('address').value,
             };
             // Save details if selected
-            if (document.getElementById('saveDetails').checked) {
+            if (saveDetailsCheckbox.checked) {
                 localStorage.setItem('solarhubUserDetails', JSON.stringify(userData));
             }
             showToastMessage("Thank you! A representative will contact you shortly to set up your payment plan.");
@@ -190,9 +364,9 @@ const showCheckoutModal = (action, productId = null) => {
     } else if (action === 'swapAvailable' && productId) {
         const product = products.find(p => p.id === productId);
         title.innerText = `Swap Available: ${product.name}`;
-        description.innerText = "Provide your details and information about your device for a swap evaluation. A representative will contact you shortly.";
         swapInfoGroup.style.display = 'block';
-        baseAmount = 0; // No initial payment for swap evaluation
+        baseAmount = 0;
+        document.getElementById('placeOrderBtn').innerText = "Submit Request";
         form.onsubmit = (e) => {
             e.preventDefault();
             const userData = {
@@ -203,7 +377,7 @@ const showCheckoutModal = (action, productId = null) => {
                 swapInfo: document.getElementById('swapInfo').value
             };
             // Save details if selected
-            if (document.getElementById('saveDetails').checked) {
+            if (saveDetailsCheckbox.checked) {
                 localStorage.setItem('solarhubUserDetails', JSON.stringify(userData));
             }
             showToastMessage("Thank you! We have received your swap request and will contact you shortly.");
@@ -211,17 +385,26 @@ const showCheckoutModal = (action, productId = null) => {
         };
     }
 
+    // Display subtotal
+    subtotalAmount.innerText = `₦${baseAmount.toLocaleString()}`;
+
     // Update total amount on delivery option change
-    const deliveryOption = document.getElementById('deliveryOption');
-    deliveryOption.onchange = () => {
+    const updateFinalAmount = () => {
         const deliveryFees = { 'free': 0, 'same-day': 4000, 'outside-lagos': 10000 };
-        const selectedFee = deliveryFees[deliveryOption.value];
+        const selectedOption = document.querySelector('input[name="deliveryOption"]:checked').value;
+        const selectedFee = deliveryFees[selectedOption];
         const total = baseAmount + selectedFee;
+
+        deliveryFeeAmount.innerText = `₦${selectedFee.toLocaleString()}`;
         finalAmount.innerText = `₦${total.toLocaleString()}`;
     };
 
-    // Initial total amount calculation
-    deliveryOption.onchange();
+    deliveryOptionRadios.forEach(radio => {
+        radio.addEventListener('change', updateFinalAmount);
+    });
+
+    // Initial total amount calculation on modal open
+    updateFinalAmount();
 
     modal.style.display = 'flex';
 };
@@ -260,17 +443,14 @@ const addToCart = (productId) => {
 };
 
 const buyNow = (productId) => {
-    // Show checkout modal with 'buyNow' action
     showCheckoutModal('buyNow', productId);
 };
 
 const paySmallSmall = (productId) => {
-    // Show checkout modal with 'paySmallSmall' action
     showCheckoutModal('paySmallSmall', productId);
 };
 
 const swapAvailable = (productId) => {
-    // Show checkout modal with 'swapAvailable' action
     showCheckoutModal('swapAvailable', productId);
 };
 
@@ -289,7 +469,6 @@ const checkout = () => {
         showToastMessage("Your cart is empty!");
         return;
     }
-    // Show checkout modal with 'checkout' action
     showCheckoutModal('checkout');
 };
 
@@ -301,7 +480,7 @@ const scrollToProducts = () => {
 const handleFlutterwavePayment = (e, productsToCheckout, baseAmount) => {
     e.preventDefault();
     
-    // Check if the Flutterwave script is loaded by
+    // Check if the Flutterwave script is loaded
     if (typeof FlutterwaveCheckout !== 'function') {
         showToastMessage('Payment gateway not loaded. Please try refreshing the page.');
         console.error('Flutterwave script not loaded.');
@@ -312,7 +491,7 @@ const handleFlutterwavePayment = (e, productsToCheckout, baseAmount) => {
     const email = document.getElementById('email').value;
     const phone = document.getElementById('phone').value;
     const address = document.getElementById('address').value;
-    const deliveryOption = document.getElementById('deliveryOption').value;
+    const deliveryOption = document.querySelector('input[name="deliveryOption"]:checked').value;
 
     // Save user details if checked
     if (document.getElementById('saveDetails').checked) {
@@ -354,7 +533,6 @@ const handleFlutterwavePayment = (e, productsToCheckout, baseAmount) => {
             }
         },
         onclose: () => {
-            // Modal closed by user
             showToastMessage("Payment was cancelled.");
         }
     });
