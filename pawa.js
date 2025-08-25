@@ -598,8 +598,6 @@ const handleFlutterwavePayment = (baseAmount) => {
         amount: finalAmount,
         currency: "NGN",
         country: "NG",
-        payment_options: "card,mobilemoney,ussd",
-        redirect_url: "https://pawa9ja.ng/order-success", // Replace with your success URL
         customer: {
             email: customerDetails.email,
             phone_number: customerDetails.phoneNumber,
