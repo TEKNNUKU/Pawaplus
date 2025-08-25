@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Contact Pawa+9ja Nigeria for all your solar energy needs, support, and inquiries. Get in touch with our team." />
+  <title>Contact Us | Pawa+9ja Nigeria</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="header">
+    <div class="nav-container">
+      <a href="index.html" class="logo">⚡ Pawa+9ja</a>
+      <div class="menu-icon" id="menuIcon">
+        <i class="fas fa-bars"></i>
+      </div>
+      <nav>
+        <ul class="nav-links" id="navLinks">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="index.html#products">Products</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="contact.html" class="active">Contact</a></li>
+          <li><a href="#" id="adminLink">Admin</a></li>
+        </ul>
+      </nav>
+      <div class="cart-icon" id="cartIcon">
+        <i class="fas fa-shopping-cart"></i>
+        <span class="cart-count" id="cartCount">0</span>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="contact-section">
+      <div class="container">
+        <h2 class="section-title">Get In Touch With Us</h2>
+        <p class="contact-subtitle">We're here to answer any questions you have. Fill out the form or use the contact details below.</p>
+        <div class="contact-content-grid">
+          <div class="contact-form-container">
+            <h3>Send a Message</h3>
+            <form id="contactForm">
+              <div class="form-group">
+                <label for="name">Your Name</label>
+                <input type="text" id="name" name="name" required>
+              </div>
+              <div class="form-group">
+                <label for="email">Your Email</label>
+                <input type="email" id="email" name="email" required>
+              </div>
+              <div class="form-group">
+                <label for="subject">Subject</label>
+                <input type="text" id="subject" name="subject" required>
+              </div>
+              <div class="form-group">
+                <label for="message">Your Message</label>
+                <textarea id="message" name="message" rows="5" required></textarea>
+              </div>
+              <button type="submit" class="btn btn-primary" id="sendMessageBtn">Send Message</button>
+            </form>
+          </div>
+          <div class="contact-info-container">
+            <h3>Contact Information</h3>
+            <div class="info-item">
+              <i class="fas fa-map-marker-alt"></i>
+              <p>123 Solar Street, Lagos, Nigeria</p>
+            </div>
+            <div class="info-item">
+              <i class="fas fa-phone"></i>
+              <p>+234 800 123 4567</p>
+            </div>
+            <div class="info-item">
+              <i class="fas fa-envelope"></i>
+              <p>support@pawa9ja.ng</p>
+            </div>
+            <div class="info-socials">
+              <h4>Follow Us</h4>
+              <a href="#"><i class="fab fa-facebook-f"></i></a>
+              <a href="#"><i class="fab fa-twitter"></i></a>
+              <a href="#"><i class="fab fa-instagram"></i></a>
+              <a href="#"><i class="fab fa-linkedin-in"></i></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-column">
+          <a href="index.html" class="logo">⚡ Pawa+9ja</a>
+          <p class="slogan">Powering Nigeria, one home at a time.</p>
+        </div>
+        <div class="footer-column">
+          <h3>Quick Links</h3>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="index.html#products">Shop</a></li>
+            <li><a href="about.html">About Us</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+        <div class="footer-column">
+          <h3>Follow Us</h3>
+          <div class="social-icons">
+            <a href="#"><i class="fab fa-facebook-f"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+          </div>
+        </div>
+        <div class="footer-column">
+          <h3>Contact</h3>
+          <p><i class="fas fa-map-marker-alt"></i> 123 Solar Street, Lagos, Nigeria</p>
+          <p><i class="fas fa-phone"></i> +234 800 123 4567</p>
+          <p><i class="fas fa-envelope"></i> support@pawa9ja.ng</p>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2024 Pawa+9ja. All Rights Reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <div class="cart-sidebar" id="cartSidebar">
+    <div class="cart-header">
+      <h3 class="cart-title">Your Cart</h3>
+      <button class="close-btn" id="cartCloseBtn">&times;</button>
+    </div>
+    <div class="cart-content" id="cartItems">
+      <p style="text-align: center;">Your cart is empty.</p>
+    </div>
+    <div class="cart-total">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <span style="font-weight: 600;">Total:</span>
+        <span class="total-amount" id="totalAmount">₦0</span>
+      </div>
+      <button class="btn btn-primary" style="width: 100%; margin-top: 1rem;" id="checkoutBtn">Checkout</button>
+    </div>
+  </div>
+
+  <div class="product-modal" id="productModal">
+    <div class="product-modal-content">
+      <button class="close-btn" id="modalCloseBtn" style="position: absolute; top: 1rem; right: 1rem;">&times;</button>
+      <div class="product-modal-image">
+        <img id="modalImage" src="" alt="Product Image">
+      </div>
+      <div class="product-modal-info">
+        <h2 id="modalTitle"></h2>
+        <div class="product-rating">
+          <span class="stars">★★★★★</span>
+          <span class="rating-count" id="modalRating"></span>
+        </div>
+        <p id="modalDescription"></p>
+        <div class="product-price">
+          <span class="current-price" id="modalPrice"></span>
+          <span class="original-price" id="modalOriginalPrice"></span>
+        </div>
+        <button class="btn btn-primary" id="modalAddToCartBtn" style="width: 100%; margin-top: auto;">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="admin-modal" id="adminModal">
+    <div class="admin-modal-content">
+      <button class="close-btn" id="adminCloseBtn" style="position: absolute; top: 1rem; right: 1rem;">&times;</button>
+      <h2>Admin Login</h2>
+      <form id="adminLoginForm">
+        <input type="email" id="adminEmail" placeholder="Enter Admin Email" required>
+        <input type="password" id="adminPassword" placeholder="Enter Admin Password" required>
+        <button type="submit" class="btn btn-primary">Login</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="pawa.js"></script>
+</body>
+</html>
