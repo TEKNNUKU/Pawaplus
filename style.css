@@ -1,47 +1,53 @@
-/* Add this CSS block to your existing styles */
-    .category-nav {
-        text-align: center;
-        margin-bottom: 2rem;
-        display: flex;
-        justify-content: center;
-        gap: 1.5rem;
-        flex-wrap: wrap;
-    }
+/*
+ * This is the CSS block you need to add to your existing style.css file.
+ * It will apply the correct styles to all pages with the corresponding HTML classes.
+ */
 
-    .category-nav a {
-        text-decoration: none;
-        color: var(--text-dark);
-        font-weight: 500;
-        padding: 0.5rem 1rem;
-        border-radius: 8px;
-        transition: background-color 0.3s, color 0.3s;
-    }
+/* Styles for the horizontal category navigation bar */
+.category-nav {
+    text-align: center;
+    margin-bottom: 2rem;
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+}
 
-    .category-nav a:hover {
-        background-color: var(--primary-orange);
-        color: var(--white);
-    }
+.category-nav a {
+    text-decoration: none;
+    color: var(--text-dark);
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    transition: background-color 0.3s, color 0.3s;
+}
 
-    .category-nav a.active {
-        background-color: var(--primary-orange);
-        color: var(--white);
-        font-weight: 600;
-    }
-    
-    .about-section {
-        padding: 4rem 0;
-    }
+.category-nav a:hover {
+    background-color: var(--primary-orange);
+    color: var(--white);
+}
 
-    .about-content-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-        gap: 2rem;
-        margin-top: 2rem;
-    }
+.category-nav a.active {
+    background-color: var(--primary-orange);
+    color: var(--white);
+    font-weight: 600;
+}
 
-    .about-mission, .about-values {
-        background: var(--bg-light);
-        padding: 2rem;
-        border-radius: 15px;
-        box-shadow: 0 5px 20px rgba(0,0,0,0.05);
-    }
+/* Styles for the "About Us" page */
+.about-section {
+    padding: 4rem 0;
+}
+
+.about-content-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.about-mission, .about-values {
+    background: var(--bg-light);
+    padding: 2rem;
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+}
