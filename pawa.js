@@ -599,9 +599,9 @@ const handleFlutterwavePayment = (baseAmount) => {
         currency: "NGN",
         country: "NG",
         customer: {
-            email: customerDetails.email,
-            phone_number: customerDetails.phoneNumber,
-            name: customerDetails.fullName,
+            email: email,
+            phone_number: phone,
+            name: name,
         },
         customizations: {
             title: "Pawa+9ja Order",
