@@ -594,6 +594,37 @@ const handleFlutterwavePayment = (baseAmount) => {
 
      FlutterwaveCheckout({
         public_key: "FLWPUBK-05bb86af711fd1998eb529cb0bc4e0f4-X",
+        tx_ref: "solarhub-" + Math.floor(Math.random() * 1000000),
+        amount: finalAmount,
+        currency: "NGN",
+        country: "NG",
+        customer: {
+            email: email,
+            phone_number: phone,
+            name: name,
+        },
+        customizations: {
+            title: "SolarHub",
+            description: "Payment for your solar products",
+        },
+        callback: (response) => {
+            if (response.status === 'successful') {
+                showToastMessage("Payment Successful! Your order has been placed.");
+                cart = {};
+                updateCartUI();
+                hideCheckoutModal();
+            } else {
+                showToastMessage("Payment Failed. Please try again.");
+            }
+        },
+        onclose: () => {
+            showToastMessage("Payment was cancelled.");
+        }
+    });
+};
+
+     FlutterwaveCheckout({
+        public_key: "FLWPUBK-05bb86af711fd1998eb529cb0bc4e0f4-X",
         tx_ref: "pawa-" + Math.floor(Math.random() * 1000000),
         amount: amount,
         currency: "NGN",
