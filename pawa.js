@@ -5,7 +5,7 @@
 
 // This is the HTML for the toast message component.
 const toastHTML = `
-  <div id="toastMessage" style="position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background-color: rgba(0, 0, 0, 0.75); color: white; padding: 15px 25px; border-radius: 10px; font-size: 1rem; z-index: 1000; opacity: 0; transition: opacity 0.5s ease; display: none; text-align: center; white-space: nowrap;">
+  <div id="toastMessage" style="position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: linear-gradient(90deg, #f7931a, #e5820a); color: white; padding: 15px 25px; border-radius: 10px; font-size: 1rem; z-index: 10000; opacity: 0; transition: opacity 0.5s ease; display: none; text-align: center; white-space: nowrap; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
   </div>
 `;
 document.body.insertAdjacentHTML('beforeend', toastHTML);
@@ -42,7 +42,7 @@ const checkoutModalHTML = `
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 1000; /* Increased z-index to be on top of the cart sidebar */
+    z-index: 10000; /* Increased z-index to be on top of the cart sidebar */
 }
 .modal-content {
     background: #fff;
@@ -570,7 +570,7 @@ const handleFlutterwavePayment = (baseAmount) => {
     const address = document.getElementById('address').value;
     const deliveryOption = document.querySelector('input[name="deliveryOption"]:checked').value;
 
-    // Client-side validation for email
+    // Robust validation for email
     if (!email || !email.includes('@')) {
         showToastMessage('Please enter a valid email address to proceed.');
         return;
